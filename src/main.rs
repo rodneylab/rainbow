@@ -12,11 +12,16 @@ fn main() {
     println!("Lowest luminance: {}", min_max_luminance.0);
     println!("Highest luminance: {}", min_max_luminance.1);
 
-    let white_contrast_ratio = contrast_ratio_from_relative_luminance(&relative_luminance(&Rgb::new(255,255,255)), &min_max_luminance.1);
-    let black_contrast_ratio = contrast_ratio_from_relative_luminance(&relative_luminance(&Rgb::new(0,0,0)), &min_max_luminance.0);
+    let white_contrast_ratio = contrast_ratio_from_relative_luminance(
+        &relative_luminance(&Rgb::new(255, 255, 255)),
+        &min_max_luminance.1,
+    );
+    let black_contrast_ratio = contrast_ratio_from_relative_luminance(
+        &relative_luminance(&Rgb::new(0, 0, 0)),
+        &min_max_luminance.0,
+    );
     println!("White luminance: {}", white_contrast_ratio);
     println!("Black luminance: {}", black_contrast_ratio);
-
 }
 
 fn contrast_ratio_from_relative_luminance(
