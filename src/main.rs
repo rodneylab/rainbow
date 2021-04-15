@@ -3,6 +3,7 @@ use photon_rs::native::open_image;
 use photon_rs::transform::resize;
 use photon_rs::PhotonImage;
 use photon_rs::Rgb;
+use std::io;
 
 fn main() {
     let img = open_image("image.jpg");
@@ -22,6 +23,22 @@ fn main() {
     );
     println!("White luminance: {}", white_contrast_ratio);
     println!("Black luminance: {}", black_contrast_ratio);
+
+    let mixed = composite_colour(&Rgb::new(0, 0, 0), &Rgb::new(255, 255, 255), &1.0);
+    let contrast = contrast_ratio(&mixed, &Rgb::new(255, 255, 255));
+    println!("Overlay contrast ratio: {}", contrast);
+
+    read_in_colour();
+}
+
+fn composite_colour(base_colour: &Rgb, overlay_colour: &Rgb, overlay_opacity: &f64) -> Rgb {
+    let r = base_colour.get_red() as f64 * (1.0 - overlay_opacity)
+        + overlay_colour.get_red() as f64 * overlay_opacity;
+    let g = base_colour.get_green() as f64 * (1.0 - overlay_opacity)
+        + overlay_colour.get_green() as f64 * overlay_opacity;
+    let b = base_colour.get_blue() as f64 * (1.0 - overlay_opacity)
+        + overlay_colour.get_blue() as f64 * overlay_opacity;
+    Rgb::new(r.trunc() as u8, g.trunc() as u8, b.trunc() as u8)
 }
 
 fn contrast_ratio_from_relative_luminance(
@@ -56,6 +73,29 @@ fn lowest_highest_luminance(image: &PhotonImage) -> (f64, f64) {
         }
     }
     (lowest_luminance, highest_luminance)
+}
+
+fn read_in_colour() -> photon_rs::Rgb {
+    println!("Hex colour: (e.g. \"#ff0044\")");
+    let mut colour_hex = String::new();
+    io::stdin()
+        .read_line(&mut colour_hex)
+        .expect("Sorry, I don't understand, try somthing like '#ff0044'");
+    let colour_hex = colour_hex.trim();
+    let r = match u8::from_str_radix(&colour_hex[1..3], 16) {
+        Ok(num) => num,
+        Err(_) => 0,
+    };
+    let g = match u8::from_str_radix(&colour_hex[3..5], 16) {
+        Ok(num) => num,
+        Err(_) => 0,
+    };
+    let b = match u8::from_str_radix(&colour_hex[5..7], 16) {
+        Ok(num) => num,
+        Err(_) => 0,
+    };
+    println!("{} {} {}", r, g, b);
+    Rgb::new(r, g, b)
 }
 
 fn resize_image(image: &PhotonImage) -> PhotonImage {
