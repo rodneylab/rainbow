@@ -1,3 +1,4 @@
+use netlify_lambda_http::{handler, lambda::Context, IntoResponse, Request, RequestExt};
 extern crate photon_rs;
 use photon_rs::native::open_image;
 use photon_rs::transform::resize;
@@ -5,46 +6,70 @@ use photon_rs::PhotonImage;
 use photon_rs::Rgb;
 use std::io;
 
-fn main() {
-    let img = open_image("image.jpg");
-    let resized_image = resize_image(&img);
+type Error = Box<dyn std::error::Error + Send + Sync + 'static>;
 
-    let min_max_luminance = lowest_highest_luminance(&resized_image);
-    println!("Lowest luminance: {}", min_max_luminance.0);
-    println!("Highest luminance: {}", min_max_luminance.1);
+#[tokio::main]
+async fn main() -> Result<(), Error> {
+    netlify_lambda::run(handler(|_request, _context| async {
+        Ok("🦀 Hello, Netlify 🦀")
+    }))
+    .await?;
+    netlify_lambda::run(handler(hello)).await?;
 
-    let white_contrast_ratio = contrast_ratio_from_relative_luminance(
-        &relative_luminance(&Rgb::new(255, 255, 255)),
-        &min_max_luminance.1,
-    );
-    let black_contrast_ratio = contrast_ratio_from_relative_luminance(
-        &relative_luminance(&Rgb::new(0, 0, 0)),
-        &min_max_luminance.0,
-    );
-    println!("White luminance: {}", white_contrast_ratio);
-    println!("Black luminance: {}", black_contrast_ratio);
+    // let resized_image;
+    if let Ok(img) = open_image("image.jpg") {
+        let resized_image = resize_image(&img);
+        let min_max_luminance = lowest_highest_luminance(&resized_image);
+        println!("Lowest luminance: {}", min_max_luminance.0);
+        println!("Highest luminance: {}", min_max_luminance.1);
 
-    let mixed = composite_colour(&Rgb::new(0, 0, 0), &Rgb::new(255, 255, 255), &1.0);
-    let contrast = contrast_ratio(&mixed, &Rgb::new(255, 255, 255));
-    println!("Overlay contrast ratio: {}", contrast);
+        let white_contrast_ratio = contrast_ratio_from_relative_luminance(
+            &relative_luminance(&Rgb::new(255, 255, 255)),
+            &min_max_luminance.1,
+        );
+        let black_contrast_ratio = contrast_ratio_from_relative_luminance(
+            &relative_luminance(&Rgb::new(0, 0, 0)),
+            &min_max_luminance.0,
+        );
+        println!("White luminance: {}", white_contrast_ratio);
+        println!("Black luminance: {}", black_contrast_ratio);
 
-    // read_in_colour();
+        let mixed = composite_colour(&Rgb::new(0, 0, 0), &Rgb::new(255, 255, 255), &1.0);
+        let contrast = contrast_ratio(&mixed, &Rgb::new(255, 255, 255));
+        println!("Overlay contrast ratio: {}", contrast);
 
-    let lightest_rgb = lowest_highest_luminance_rgb(&resized_image).1;
-    println!("lightest background: {:?}", lightest_rgb);
-    let alpha = overlay_opacity(
-        &Rgb::new(255, 255, 255),
-        &lightest_rgb,
-        &Rgb::new(0, 0, 0),
-        4.5,
-    );
-    println!("Overlay alpha: {}", alpha);
+        // read_in_colour();
 
-    // check
-    let new_lightest = composite_colour(&lightest_rgb, &Rgb::new(0, 0, 0), &alpha);
-    println!("new lightest: {:?}", new_lightest);
-    let actual_contrast_ratio = contrast_ratio(&new_lightest, &Rgb::new(255, 255, 255));
-    println!("Actual contrast ratio: {}", actual_contrast_ratio);
+        let lightest_rgb = lowest_highest_luminance_rgb(&resized_image).1;
+        println!("lightest background: {:?}", lightest_rgb);
+        let alpha = overlay_opacity(
+            &Rgb::new(255, 255, 255),
+            &lightest_rgb,
+            &Rgb::new(0, 0, 0),
+            4.5,
+        );
+        println!("Overlay alpha: {}", alpha);
+
+        // check
+        let new_lightest = composite_colour(&lightest_rgb, &Rgb::new(0, 0, 0), &alpha);
+        println!("new lightest: {:?}", new_lightest);
+        let actual_contrast_ratio = contrast_ratio(&new_lightest, &Rgb::new(255, 255, 255));
+        println!("Actual contrast ratio: {}", actual_contrast_ratio);
+    } else {
+        println!("Error opening image image.jpg");
+    }
+
+    Ok(())
+}
+
+async fn hello(request: Request, _: Context) -> Result<impl IntoResponse, Error> {
+    Ok(format!(
+        "hello {}",
+        request
+            .query_string_parameters()
+            .get("name")
+            .unwrap_or_else(|| "stranger")
+    ))
 }
 
 fn overlay_opacity(
@@ -88,8 +113,8 @@ fn composite_colour(base_colour: &Rgb, overlay_colour: &Rgb, overlay_opacity: &f
         + overlay_colour.get_green() as f64 * overlay_opacity;
     let b = base_colour.get_blue() as f64 * (1.0 - overlay_opacity)
         + overlay_colour.get_blue() as f64 * overlay_opacity;
-    Rgb::new(r.trunc() as u8, g.trunc() as u8, b.trunc() as u8)
-    // Rgb::new(r.ceil() as u8, g.ceil() as u8, b.ceil() as u8)
+    // Rgb::new(r.trunc() as u8, g.trunc() as u8, b.trunc() as u8)
+    Rgb::new(r.ceil() as u8, g.ceil() as u8, b.ceil() as u8)
 }
 
 fn contrast_ratio_from_relative_luminance(
