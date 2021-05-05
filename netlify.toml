@@ -1,5 +1,5 @@
 [build]
-  command = "npm run build"
+  command = "make build && npm run build"
   environment = { GATSBY_CPU_COUNT = "1" }
   functions = "netlify/functions"
   publish = "public"
