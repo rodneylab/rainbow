@@ -5,6 +5,7 @@ help: ## Show this help
 
 build: ## Build static binary and put itin the functions directory.
 	@cargo build --release --target x86_64-unknown-linux-musl
+	@cargo install cargo-strip
 	@cargo strip --target x86_64-unknown-linux-musl
 	@mkdir -p netlify/functions
 	@cp target/x86_64-unknown-linux-musl/release/rainbow netlify/functions
