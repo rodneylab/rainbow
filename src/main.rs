@@ -10,11 +10,10 @@ type Error = Box<dyn std::error::Error + Send + Sync + 'static>;
 
 #[tokio::main]
 async fn main() -> Result<(), Error> {
-    netlify_lambda::run(handler(|_request, _context| async {
-        Ok("🦀 Hello, Netlify 🦀")
-    }))
-    .await?;
-    netlify_lambda::run(handler(hello)).await?;
+    // netlify_lambda::run(handler(|_request, _context| async {
+    //     Ok("🦀 Hello, Netlify 🦀")
+    // }))
+    // .await?;
 
     // let resized_image;
     if let Ok(img) = open_image("image.jpg") {
@@ -59,6 +58,7 @@ async fn main() -> Result<(), Error> {
         println!("Error opening image image.jpg");
     }
 
+    netlify_lambda::run(handler(hello)).await?;
     Ok(())
 }
 
