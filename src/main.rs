@@ -4,6 +4,7 @@ use photon_rs::native::open_image;
 use photon_rs::transform::resize;
 use photon_rs::PhotonImage;
 use photon_rs::Rgb;
+use serde_json::json;
 use std::io;
 
 type Error = Box<dyn std::error::Error + Send + Sync + 'static>;
@@ -63,13 +64,16 @@ async fn main() -> Result<(), Error> {
 }
 
 async fn hello(request: Request, _: Context) -> Result<impl IntoResponse, Error> {
-    Ok(format!(
-        "hello {}",
-        request
-            .query_string_parameters()
-            .get("name")
-            .unwrap_or_else(|| "stranger")
-    ))
+    // Ok(format!(
+    //     "hello {}",
+    //     request
+    //         .query_string_parameters()
+    //         .get("name")
+    //         .unwrap_or_else(|| "stranger")
+    // ))
+    Ok(json!({
+        "name": request.query_string_parameters().get("name").unwrap_or_else(|| "stranger")
+    }))
 }
 
 fn overlay_opacity(
