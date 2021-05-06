@@ -122,28 +122,28 @@ module.exports = {
       },
     },
     'gatsby-plugin-react-helmet',
-    {
-      resolve: 'gatsby-plugin-mdx',
-      options: {
-        defaultLayouts: {
-          blog: path.resolve('./src/templates/blog-post.jsx'),
-          default: path.resolve('./src/templates/blog-post.jsx'),
-        },
-        extensions: ['.mdx', '.md'],
-        plugins: [
-          {
-            resolve: 'gatsby-remark-images',
-            options: {
-              linkImagesToOriginal: false,
-              maxWidth: maxImageWidth,
-              showCaptions: ['title'],
-              withWebp: { quality: 100 },
-              tracedSVG: { color: '#5cc8ff', background: '#fff275' },
-            },
-          },
-        ],
-        gatsbyRemarkPlugins: [],
-      },
-    },
+    // {
+    //   resolve: 'gatsby-plugin-mdx',
+    //   options: {
+    //     defaultLayouts: {
+    //       blog: path.resolve('./src/templates/blog-post.jsx'),
+    //       default: path.resolve('./src/templates/blog-post.jsx'),
+    //     },
+    //     extensions: ['.mdx', '.md'],
+    //     plugins: [
+    //       {
+    //         resolve: 'gatsby-remark-images',
+    //         options: {
+    //           linkImagesToOriginal: false,
+    //           maxWidth: maxImageWidth,
+    //           showCaptions: ['title'],
+    //           withWebp: { quality: 100 },
+    //           tracedSVG: { color: '#5cc8ff', background: '#fff275' },
+    //         },
+    //       },
+    //     ],
+    //     gatsbyRemarkPlugins: [],
+    //   },
+    // },
   ],
 };
