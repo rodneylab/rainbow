@@ -34,10 +34,12 @@ $spacing-24: 6rem;
 $spacing-32: 8rem;
 
 // Fonts
-$font-family-serif: 'Source Sans Pro', 'Lustria', 'Noto Serif', 'Merriweather', 'Georgia', 'Cambria',
-  'Times New Roman', 'Times', serif;
+$font-family-sans: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans,
+  Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
+$font-family-serif: 'Merriweather', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+  Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', serif;
 $font-body: $font-family-serif;
-$font-heading: 'Lora', $font-family-serif;
+$font-heading: $font-family-serif;
 
 // Font Weight
 // check imported weights and styles in gatsby-browser.jsx
@@ -77,15 +79,16 @@ $line-height-normal: 1.5;
 $line-height-relaxed: 1.75;
 
 // Colours
-$color-theme-1: #d62828; // maximum red
-$color-theme-2: #5cc8ff; // maya blue
-$color-theme-3: #fff275; // corn
-$color-theme-4: #1b4079;// dark cornflower blue
+$color-theme-1: #252525; // 
+$color-theme-2: #d5d5d3; // 
+$color-theme-3: #ffffff; // 
+$color-theme-4: #444444; // 
+$color-theme-5: #fdd947; // 
 
 $color-primary: #005b99;
 $color-text: #0d1821; // rich black FOGRA 29
-$color-heading: $color-theme-4;
-$color-heading-black: $color-theme-4;
+$color-heading: $color-theme-2;
+$color-heading-black: $color-theme-2;
 $color-accent: #fdfffc; // baby powder
 $color-success: #2ec4b6; // tiffany blue
 $color-danger: #e71d36; // rose madder
@@ -138,7 +141,7 @@ h3,
 h4,
 h5,
 h6 {
-  font-weight: $font-weight-bold;
+  font-weight: $font-weight-black;
   color: $color-heading;
 }
 
@@ -146,7 +149,7 @@ h1 {
   margin-top: 0;
   font-weight: $font-weight-black;
   font-size: $font-size-6;
-  font-style: italic;
+  // font-style: italic;
   color: $color-heading-black;
 }
 
@@ -247,7 +250,7 @@ table thead tr th {
 
 /* Link */
 a {
-  color: $color-theme-4;
+  color: $color-theme-1;
 }
 
 h1 > a {

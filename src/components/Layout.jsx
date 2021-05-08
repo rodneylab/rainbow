@@ -127,7 +127,7 @@ export const PureLayout = ({ children, data: { site } }) => {
 
   return (
     <div className={container}>
-      <header className={headerContainer}>
+      {/* <header className={headerContainer}>
         <Link aria-label="Jump to home page" to="/" className={hoverJump}>
           <span className={logo}>
             <CameraIcon />
@@ -147,7 +147,7 @@ export const PureLayout = ({ children, data: { site } }) => {
             </li>
           </ul>
         </nav>
-      </header>
+      </header> */}
       <main className={mainContainer}>{children}</main>
       <footer className={footerContainer}>
         <div>
