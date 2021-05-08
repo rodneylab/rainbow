@@ -3,12 +3,18 @@ import axios from 'axios';
 import { graphql } from 'gatsby';
 import PropTypes from 'prop-types';
 
+import {
+  header,
+  imagePlaceholder,
+  imagePlaceholderContent,
+  userImageContainer,
+} from './index.module.scss';
 import { PureLayout as Layout } from '../components/Layout';
 import { PureSEO as SEO } from '../components/SEO';
 
 export default function Home({ data }) {
-  const [files, setFiles] = useState([]);
-  const [imagePreviewURL, setImagePreviewURL] = useState();
+  const [localFile, setLocalFile] = useState('');
+  const [imagePreviewURL, setImagePreviewURL] = useState('#');
 
   const handleClick = async () => {
     try {
@@ -30,14 +36,18 @@ export default function Home({ data }) {
   };
 
   const handleFileInput = (event) => {
-    console.log(event.target);
-    setFiles(event.target.files);
-    console.log('file: ', files[0]);
-    let reader = new FileReader();
+    // setFiles(event.target.files);
+    const reader = new FileReader();
     reader.onloadend = () => {
       setImagePreviewURL(reader.result);
     };
-    reader.readAsDataURL(files[0]);
+    const file = event.target.files[0];
+    reader.readAsDataURL(file);
+    setLocalFile(file);
+  };
+
+  const uploadImage = () => {
+    /* upload image to backblaze and get url */
   };
 
   return (
@@ -49,20 +59,38 @@ export default function Home({ data }) {
       />
       <Layout data={data}>
         <>
-          <header>
+          <header className={header}>
             <h1>Rainbow Contrast Checker</h1>
           </header>
           <form method="post" encType="multipart/form-data">
             <div>
-              <label htmlFor="file">Choose file to upload</label>
-              <input onChange={handleFileInput} type="file" id="file" accept="image/*" />
+              <label htmlFor="file">Choose an image file to upload</label>
+              <input
+                onChange={handleFileInput}
+                type="file"
+                name="image"
+                id="file"
+                accept="image/*"
+              />
             </div>
             {/* <div>
               <button type="submit">Submit</button>
             </div> */}
           </form>
           <br />
-          <img alt="user uploaded content" id="myImg" src={imagePreviewURL} />
+          {imagePreviewURL === '#' ? (
+            <div className={imagePlaceholder}>
+              {/* <p>Add an image to get going</p> */}
+              <div className={imagePlaceholderContent}>
+                <label htmlFor="file">Choose an image file to get going</label>
+                <input onChange={handleFileInput} type="file" id="file" accept="image/*" />
+              </div>
+            </div>
+          ) : (
+            <div className={userImageContainer}>
+              <img alt="user uploaded content" id="myImg" src={imagePreviewURL} />
+            </div>
+          )}
           <button
             type="submit"
             onClick={() => {

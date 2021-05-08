@@ -1,0 +1,62 @@
+@import '../styles/styles.scss';
+
+.header {
+  h1 {
+    text-align: center;
+    margin: $spacing-6 auto;
+    padding: $spacing-2;
+    background-color: rgba($color: $color-theme-1, $alpha: 0.5);
+  }
+}
+.image-placeholder::before {
+  content: '';
+  display: inline-block;
+  width: 1px;
+  height: 0;
+  padding-top: 66.6667%;
+}
+.image-placeholder {
+  display: flex;
+  // flex-direction: column;
+  align-items: center;
+  // justify-content: space-around;
+  background-color: $color-theme-4;
+  color: $color-theme-2;
+  width: 60%;
+  margin-left: auto;
+  margin-right: auto;
+
+  p {
+    text-align: center;
+    margin: auto;
+  }
+}
+
+.image-placeholder-content {
+  display: flex;
+  flex-direction: column;
+  // width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+
+  input {
+    margin-top: $spacing-4;
+    margin-left: auto;
+    margin-right: auto;
+    align-self: center;
+    justify-self: center;
+  }
+}
+
+.user-image-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+
+  img {
+    width: 60%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
