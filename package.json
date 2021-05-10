@@ -1,7 +1,7 @@
 {
-  "name": "gatsby-starter-climate",
+  "name": "rainbow-contrast",
   "private": true,
-  "description": "A lightweight starter for a fast mdx Gatsby 3 blog site",
+  "description": "Accessibility tool for check contrast between a background image and overlay text",
   "version": "0.1.0",
   "license": "BSD-3-Clause",
   "scripts": {
@@ -60,7 +60,7 @@
     "eslint-plugin-react": "^7.23.2",
     "eslint-plugin-react-hooks": "^4.2.0",
     "husky": "^6.0.0",
-    "prettier": "2.2.1",
+    "prettier": "^2.3.0",
     "stylelint": "^13.13.1",
     "stylelint-config-recommended-scss": "^4.2.0",
     "stylelint-scss": "^3.19.0"
