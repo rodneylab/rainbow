@@ -15,13 +15,14 @@ import { PureSEO as SEO } from '../components/SEO';
 export default function Home({ data }) {
   const [localFile, setLocalFile] = useState('');
   const [imagePreviewURL, setImagePreviewURL] = useState('#');
+  const [imageBase64, setImageBase64] = useState('');
 
   const handleClick = async () => {
     try {
       const response = await axios({
         url: '.netlify/functions/rainbow?name=Nemo',
         method: 'POST',
-        data: { name: 'nemo' },
+        data: { name: 'nemo', base64: imageBase64 },
       });
       console.log('Response: ', response);
     } catch (error) {
@@ -40,6 +41,8 @@ export default function Home({ data }) {
     const reader = new FileReader();
     reader.onloadend = () => {
       setImagePreviewURL(reader.result);
+      // console.log('result: ', reader.result);
+      setImageBase64(reader.result);
     };
     const file = event.target.files[0];
     reader.readAsDataURL(file);
