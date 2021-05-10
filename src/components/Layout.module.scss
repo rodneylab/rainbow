@@ -25,37 +25,37 @@ $colours: #fedc00 0, #fedc00 1/18 * 100%, #fcb712 0, #fcb712 2/18 * 100%, #f7921
   // background: linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet);
 }
 
-.header-container {
-  display: flex;
-  align-items: flex-end;
-  max-width: $max-width-wrapper;
-  width: 100%;
-  margin: $spacing-0 auto $spacing-12;
-}
+// .header-container {
+//   display: flex;
+//   align-items: flex-end;
+//   max-width: $max-width-wrapper;
+//   width: 100%;
+//   margin: $spacing-0 auto $spacing-12;
+// }
 
-.nav {
-  display: flex;
-  margin-left: auto;
-  list-style-type: none;
+// .nav {
+//   display: flex;
+//   margin-left: auto;
+//   list-style-type: none;
 
-  ul {
-    display: flex;
-    align-items: flex-end;
-    padding-bottom: 0;
-    margin-bottom: $spacing-0;
+//   ul {
+//     display: flex;
+//     align-items: flex-end;
+//     padding-bottom: 0;
+//     margin-bottom: $spacing-0;
 
-    li {
-      display: flex;
-      font-size: $font-size-4;
-      margin-left: $spacing-6;
-      margin-bottom: $spacing-1;
-    }
-  }
-}
+//     li {
+//       display: flex;
+//       font-size: $font-size-4;
+//       margin-left: $spacing-6;
+//       margin-bottom: $spacing-1;
+//     }
+//   }
+// }
 
-.logo {
-  color: $color-theme-1;
-}
+// .logo {
+//   color: $color-theme-1;
+// }
 
 .main-container {
   // max-width: $max-width-wrapper;
