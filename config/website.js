@@ -15,7 +15,7 @@ const {
 
 module.exports = {
   siteLanguage: 'en-GB',
-  siteTitle: 'Climate Gatsby 3 MDX Blog Starter',
+  siteTitle: 'Rainbow Contrast',
   siteUrl: 'https://www.example.com',
 
   contactEmailAddress: CONTACT_EMAIL,
