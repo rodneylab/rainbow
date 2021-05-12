@@ -13,16 +13,16 @@ import { PureLayout as Layout } from '../components/Layout';
 import { PureSEO as SEO } from '../components/SEO';
 
 export default function Home({ data }) {
-  const [localFile, setLocalFile] = useState('');
+  const [, setLocalFile] = useState('');
   const [imagePreviewURL, setImagePreviewURL] = useState('#');
   const [imageBase64, setImageBase64] = useState('');
 
   const handleClick = async () => {
     try {
       const response = await axios({
-        url: '.netlify/functions/rainbow?name=Nemo',
+        url: '.netlify/functions/rainbow',
         method: 'POST',
-        data: { name: 'nemo', base64: imageBase64 },
+        data: { base64: imageBase64 },
       });
       console.log('Response: ', response);
     } catch (error) {
@@ -37,20 +37,14 @@ export default function Home({ data }) {
   };
 
   const handleFileInput = (event) => {
-    // setFiles(event.target.files);
     const reader = new FileReader();
     reader.onloadend = () => {
       setImagePreviewURL(reader.result);
-      // console.log('result: ', reader.result);
       setImageBase64(reader.result);
     };
     const file = event.target.files[0];
     reader.readAsDataURL(file);
     setLocalFile(file);
-  };
-
-  const uploadImage = () => {
-    /* upload image to backblaze and get url */
   };
 
   return (
