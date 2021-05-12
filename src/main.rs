@@ -15,19 +15,18 @@ async fn main() -> Result<(), Error> {
 }
 
 async fn respond_with_alpha(event: Value, _: Context) -> Result<Value, Error> {
-    let base64_image = event["base64"].as_str().unwrap_or("");
-    let image = base64_to_image(&base64_image);
-    let resized_image = resize_image(&image);
-    let lightest_rgb = lowest_highest_luminance_rgb(&resized_image).1;
-    println!("lightest background: {:?}", lightest_rgb);
-    let alpha = overlay_opacity(
-        &Rgb::new(255, 255, 255),
-        &lightest_rgb,
-        &Rgb::new(0, 0, 0),
-        4.5,
-    );
+    let base64_image = event["base64"].as_str().unwrap_or("hmmm");
+    // let image = base64_to_image(&base64_image);
+    // let resized_image = resize_image(&image);
+    // let lightest_rgb = lowest_highest_luminance_rgb(&resized_image).1;
+    // let alpha = overlay_opacity(
+    //     &Rgb::new(255, 255, 255),
+    //     &lightest_rgb,
+    //     &Rgb::new(0, 0, 0),
+    //     4.5,
+    // );
 
-    Ok(json!({ "alpha": alpha }))
+    Ok(json!({ "alpha": base64_image }))
 }
 
 fn overlay_opacity(
