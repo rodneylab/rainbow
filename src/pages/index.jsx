@@ -25,6 +25,7 @@ export default function Home({ data }) {
         data: { base64: imageBase64 },
       });
       console.log('Response: ', response);
+      console.log('JSON: ', await response.json());
     } catch (error) {
       if (error.response) {
         console.log('Server responded with non 2xx code: ', error.response.data);
