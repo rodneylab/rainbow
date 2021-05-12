@@ -1,24 +1,21 @@
-use netlify_lambda_http::{handler, lambda::Context, IntoResponse, Request, RequestExt};
+use netlify_lambda_http::{lambda::Context};
+use netlify_lambda::handler_fn;
 extern crate photon_rs;
 use photon_rs::transform::resize;
 use photon_rs::{base64_to_image, PhotonImage, Rgb};
 use serde_json::json;
+use serde_json::Value;
 
 type Error = Box<dyn std::error::Error + Send + Sync + 'static>;
 
 #[tokio::main]
 async fn main() -> Result<(), Error> {
-    netlify_lambda::run(handler(respond_with_alpha)).await?;
+    netlify_lambda::run(handler_fn(respond_with_alpha)).await?;
     Ok(())
 }
 
-async fn respond_with_alpha(request: Request, _: Context) -> Result<impl IntoResponse, Error> {
-    let base64_image = String::from(
-        request
-            .query_string_parameters()
-            .get("base64")
-            .unwrap_or_else(|| ""),
-    );
+async fn respond_with_alpha(event: Value, _: Context) -> Result<Value, Error> {
+    let base64_image = event["base64"].as_str().unwrap_or("");
     let image = base64_to_image(&base64_image);
     let resized_image = resize_image(&image);
     let lightest_rgb = lowest_highest_luminance_rgb(&resized_image).1;
