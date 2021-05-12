@@ -23,7 +23,7 @@ $colours: #fedc00 0, #fedc00 1/18 * 100%, #fcb712 0, #fcb712 2/18 * 100%, #f7921
 .main-container {
   max-width: 62rem;
   width: 100%;
-  height: 100vh;
+  min-height: 100vh;
   background: repeating-radial-gradient(circle at bottom left, $colours),
     repeating-radial-gradient(circle at bottom right, $colours);
   background-blend-mode: overlay;
