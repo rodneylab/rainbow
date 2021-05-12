@@ -1,5 +1,6 @@
-use netlify_lambda_http::{lambda::Context};
 use netlify_lambda::handler_fn;
+use netlify_lambda_http::lambda::Context;
+use netlify_lambda_http::IntoResponse;
 extern crate photon_rs;
 use photon_rs::transform::resize;
 use photon_rs::{base64_to_image, PhotonImage, Rgb};
