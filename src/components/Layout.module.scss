@@ -103,9 +103,3 @@ $colours: #fedc00 0, #fedc00 1/18 * 100%, #fcb712 0, #fcb712 2/18 * 100%, #f7921
 .hover-jump:hover {
   transform: translateY(-$spacing-2);
 }
-
-@media screen and (max-width: $desktop-breakpoint) {
-  .container {
-    margin: $spacing-0 $spacing-4;
-  }
-}
