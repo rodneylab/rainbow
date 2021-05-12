@@ -1,6 +1,6 @@
 import React from 'react';
 import dayjs from 'dayjs';
-import { graphql, Link } from 'gatsby';
+import { graphql } from 'gatsby';
 import PropTypes from 'prop-types';
 import { StaticImage } from 'gatsby-plugin-image';
 
@@ -8,17 +8,13 @@ import {
   container,
   footerContainer,
   footerIcons,
-  headerContainer,
   hoverJump,
-  logo,
   mainContainer,
-  nav,
 } from './Layout.module.scss';
 
 import { COPYRIGHT_ENTITY } from '../constants/entities';
 import { ExternalLink } from './Link';
 import {
-  CameraIcon,
   FacebookIcon,
   GithubIcon,
   LinkedinIcon,
@@ -86,7 +82,7 @@ const RodneyLabCredit = () => (
     style={{
       display: 'flex',
       alignItems: 'center',
-      color: '#032539',
+      color: '#fdd947',
       fontFamily: 'Lato',
     }}
   >
@@ -98,7 +94,7 @@ const RodneyLabCredit = () => (
         aria-label="Open Rodney Lab site"
         href="https://rodneylab.com"
         rel="noopener"
-        style={{ display: 'flex', alignItems: 'center', margin: '0 0.25rem'}}
+        style={{ display: 'flex', alignItems: 'center', margin: '0 0.25rem' }}
       >
         <StaticImage
           alt="Rodney Lab logo"
@@ -114,7 +110,7 @@ const RodneyLabCredit = () => (
       </a>
       {' '}
       <a aria-label="Open Rodney Lab site" href="https://rodneylab.com" rel="noopener">
-        <span style={{ fontWeight: 300 }}>RODNEY LAB</span>
+        <span style={{ fontWeight: 300, color: '#fdd947' }}>RODNEY LAB</span>
       </a>
       .
     </span>
@@ -127,27 +123,6 @@ export const PureLayout = ({ children, data: { site } }) => {
 
   return (
     <div className={container}>
-      {/* <header className={headerContainer}>
-        <Link aria-label="Jump to home page" to="/" className={hoverJump}>
-          <span className={logo}>
-            <CameraIcon />
-          </span>
-        </Link>
-        <nav className={nav}>
-          <ul>
-            <li>
-              <Link aria-label="Jump to home page" to="/">
-                Home
-              </Link>
-            </li>
-            <li>
-              <Link aria-label="Jump to contact page" to="/contact/">
-                Contact
-              </Link>
-            </li>
-          </ul>
-        </nav>
-      </header> */}
       <main className={mainContainer}>{children}</main>
       <footer className={footerContainer}>
         <div>
