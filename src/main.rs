@@ -1,6 +1,7 @@
 use netlify_lambda::handler_fn;
 use netlify_lambda_http::lambda::Context;
 use netlify_lambda_http::IntoResponse;
+use netlify_lambda::lambda;
 extern crate photon_rs;
 use photon_rs::transform::resize;
 use photon_rs::{base64_to_image, PhotonImage, Rgb};
@@ -9,8 +10,15 @@ use serde_json::Value;
 
 type Error = Box<dyn std::error::Error + Send + Sync + 'static>;
 
+#[lambda]
 #[tokio::main]
-async fn main() -> Result<(), Error> {
+// async fn main() -> Result<(), Error> {
+async fn main(_event: Value, _: Context) -> Result<(), Error> {
+    // match netlify_lambda::run(handler_fn(respond_with_alpha)).await? {
+    //     Ok(json!(json)) => Ok(json!(json)),
+    //     Err(e) => Ok("Oh")
+    // }
+
     netlify_lambda::run(handler_fn(respond_with_alpha)).await?;
     Ok(())
 }
