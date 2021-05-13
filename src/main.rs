@@ -1,3 +1,5 @@
+use netlify_lambda_http::Request;
+use netlify_lambda_http::handler;
 use netlify_lambda::handler_fn;
 use netlify_lambda_http::lambda::Context;
 use netlify_lambda_http::IntoResponse;
@@ -20,7 +22,8 @@ async fn main(_event: Value, _: Context) -> Result<(), Error> {
     //     Err(e) => Ok("Oh")
     // }
 
-    netlify_lambda::run(handler_fn(respond_with_alpha)).await?;
+    // netlify_lambda::run(handler_fn(respond_with_alpha)).await?;
+    netlify_lambda::run(handler_fn(hello)).await?;
     Ok(())
 }
 
@@ -47,6 +50,14 @@ async fn respond_with_alpha(event: Value, _: Context) -> Result<Response, Error>
     Ok(resp)
 }
 
+async fn hello(event: Value, _: Context) -> Result<(), Error> {
+    let base64_image = event["base64"].as_str().unwrap_or("hmmm");
+    let resp = Response {
+        alpha: base64_image.to_string(),
+    };
+    serde_json::to_string(&resp)?;
+    Ok(())
+}
 fn overlay_opacity(
     foreground_colour: &Rgb,
     background_colour: &Rgb,
