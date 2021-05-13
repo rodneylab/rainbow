@@ -7,6 +7,7 @@ use photon_rs::transform::resize;
 use photon_rs::{base64_to_image, PhotonImage, Rgb};
 use serde_json::json;
 use serde_json::Value;
+use serde::Serialize;
 
 type Error = Box<dyn std::error::Error + Send + Sync + 'static>;
 
@@ -23,7 +24,12 @@ async fn main(_event: Value, _: Context) -> Result<(), Error> {
     Ok(())
 }
 
-async fn respond_with_alpha(event: Value, _: Context) -> Result<Value, Error> {
+#[derive(Serialize)]
+struct Response {
+    alpha: String,
+}
+
+async fn respond_with_alpha(event: Value, _: Context) -> Result<Response, Error> {
     let base64_image = event["base64"].as_str().unwrap_or("hmmm");
     // let image = base64_to_image(&base64_image);
     // let resized_image = resize_image(&image);
@@ -34,8 +40,11 @@ async fn respond_with_alpha(event: Value, _: Context) -> Result<Value, Error> {
     //     &Rgb::new(0, 0, 0),
     //     4.5,
     // );
+    let resp = Response {
+        alpha: base64_image.to_string(),
+    };
 
-    Ok(json!({ "alpha": base64_image }))
+    Ok(resp)
 }
 
 fn overlay_opacity(

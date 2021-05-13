@@ -1043,6 +1043,7 @@ dependencies = [
  "netlify_lambda",
  "netlify_lambda_http",
  "photon-rs",
+ "serde",
  "serde_json",
  "tokio",
 ]
