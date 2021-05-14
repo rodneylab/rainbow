@@ -1,15 +1,15 @@
-use netlify_lambda_http::Request;
+use netlify_lambda::{handler_fn, Context};
 use netlify_lambda_http::handler;
-use netlify_lambda::handler_fn;
-use netlify_lambda_http::lambda::Context;
-use netlify_lambda_http::IntoResponse;
+use netlify_lambda_http::Request;
+// use netlify_lambda_http::lambda::Context;
 use netlify_lambda::lambda;
+use netlify_lambda_http::IntoResponse;
 extern crate photon_rs;
 use photon_rs::transform::resize;
 use photon_rs::{base64_to_image, PhotonImage, Rgb};
-use serde_json::json;
-use serde_json::Value;
+
 use serde::Serialize;
+use serde_json::Value;
 
 type Error = Box<dyn std::error::Error + Send + Sync + 'static>;
 
@@ -23,8 +23,8 @@ async fn main(_event: Value, _: Context) -> Result<(), Error> {
     // }
 
     // netlify_lambda::run(handler_fn(respond_with_alpha)).await?;
-    netlify_lambda::run(handler_fn(hello)).await?;
-    Ok(())
+    let func = handler_fn(hello);
+    Ok(netlify_lambda::run(func).await?)
 }
 
 #[derive(Serialize)]
@@ -50,14 +50,15 @@ async fn respond_with_alpha(event: Value, _: Context) -> Result<Response, Error>
     Ok(resp)
 }
 
-async fn hello(event: Value, _: Context) -> Result<(), Error> {
+async fn hello(event: Value, _: Context) -> Result<Value, Error> {
     let base64_image = event["base64"].as_str().unwrap_or("hmmm");
     let resp = Response {
         alpha: base64_image.to_string(),
     };
-    serde_json::to_string(&resp)?;
-    Ok(())
+
+    Ok(serde_json::Value::String(serde_json::to_string(&resp)?))
 }
+
 fn overlay_opacity(
     foreground_colour: &Rgb,
     background_colour: &Rgb,
