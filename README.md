@@ -1,3 +1,4 @@
+  <img src="./images/rodneylab-github-rainbow-contrast.png" alt="Rodney Lab rainbow contrast Github banner">
 <p align="center">
   <a aria-label="Open Rodney Lab site" href="https://rodneylab.com" rel="nofollow noopener noreferrer">
     <img alt="Rodney Lab logo" src="https://rodneylab.com/assets/icon.png" width="60" />
