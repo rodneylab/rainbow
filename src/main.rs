@@ -31,7 +31,7 @@ struct ClientRequest {
 async fn respond_with_alpha(request: Request, _: Context) -> Result<impl IntoResponse, Error> {
     let body = request.body();
     let body: ClientRequest = serde_json::from_slice(&body)?;
-    let base64_image = body.base64;
+    let base64_image = get_data_from_data_uri(&body.base64);
     let image = base64_to_image(&base64_image);
     let resized_image = resize_image(&image);
     let lightest_rgb = lowest_highest_luminance_rgb(&resized_image).1;
@@ -42,6 +42,15 @@ async fn respond_with_alpha(request: Request, _: Context) -> Result<impl IntoRes
         4.5,
     );
     Ok(json!({ "alpha": alpha }))
+}
+
+fn get_data_from_data_uri(data_uri: &str) -> &str {
+    let data;
+    match data_uri.split(",").nth(1) {
+        Some(value) => data = value,
+        None => data = &data_uri,
+    }
+    data
 }
 
 fn overlay_opacity(
@@ -267,6 +276,14 @@ fn relative_luminance_derivative(colour_ratio: &RgbRatio) -> f64 {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn test_get_data_from_data_uri() {
+        let data_uri="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==";
+        let data="iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==";
+        assert_eq!(get_data_from_data_uri(data_uri), data);
+        assert_eq!(get_data_from_data_uri(data), data);
+    }
 
     #[test]
     fn test_relative_luminance() {
