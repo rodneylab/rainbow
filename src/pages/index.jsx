@@ -19,13 +19,14 @@ export default function Home({ data }) {
 
   const handleClick = async () => {
     try {
+      console.log('base64: ', imageBase64);
       const response = await axios({
         url: '.netlify/functions/rainbow',
         method: 'POST',
         data: { base64: imageBase64 },
       });
       console.log('Response: ', response);
-      console.log('JSON: ', await response.json());
+      console.log('JSON: ', await response.data);
     } catch (error) {
       if (error.response) {
         console.log('Server responded with non 2xx code: ', error.response.data);
