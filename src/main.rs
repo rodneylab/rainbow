@@ -1,64 +1,67 @@
-use netlify_lambda::{handler_fn, Context};
-use netlify_lambda_http::handler;
-use netlify_lambda_http::Request;
-// use netlify_lambda_http::lambda::Context;
-use netlify_lambda::lambda;
-use netlify_lambda_http::IntoResponse;
+use netlify_lambda_http::{
+    handler,
+    lambda::{run, Context},
+    IntoResponse, Request,
+};
 extern crate photon_rs;
-use photon_rs::transform::resize;
-use photon_rs::{base64_to_image, PhotonImage, Rgb};
+// use photon_rs::transform::resize;
+use photon_rs::{transform::resize, PhotonImage, Rgb};
 
-use serde::Serialize;
-use serde_json::{json, Value};
+use serde::Deserialize;
+use serde_json::json;
 
 type Error = Box<dyn std::error::Error + Send + Sync + 'static>;
 
-#[lambda]
 #[tokio::main]
-// async fn main() -> Result<(), Error> {
-async fn main(_event: Value, _: Context) -> Result<(), Error> {
-    // match netlify_lambda::run(handler_fn(respond_with_alpha)).await? {
-    //     Ok(json!(json)) => Ok(json!(json)),
-    //     Err(e) => Ok("Oh")
-    // }
-
-    // netlify_lambda::run(handler_fn(respond_with_alpha)).await?;
-    let func = handler_fn(hello);
-    Ok(netlify_lambda::run(func).await?)
+async fn main() -> Result<(), Error> {
+    run(handler(hola)).await?;
+    Ok(())
 }
 
-#[derive(Serialize)]
-struct Response {
-    alpha: String,
-}
-
-async fn respond_with_alpha(event: Value, _: Context) -> Result<Response, Error> {
-    let base64_image = event["base64"].as_str().unwrap_or("hmmm");
-    // let image = base64_to_image(&base64_image);
-    // let resized_image = resize_image(&image);
-    // let lightest_rgb = lowest_highest_luminance_rgb(&resized_image).1;
-    // let alpha = overlay_opacity(
-    //     &Rgb::new(255, 255, 255),
-    //     &lightest_rgb,
-    //     &Rgb::new(0, 0, 0),
-    //     4.5,
-    // );
-    let resp = Response {
-        alpha: base64_image.to_string(),
-    };
-
-    Ok(resp)
-}
-
-async fn hello(event: Value, _: Context) -> Result<Value, Error> {
-    let base64_image = event["base64"].as_str().unwrap_or("hmmm");
-    let _resp = Response {
-        alpha: base64_image.to_string(),
-    };
-
-    // Ok(serde_json::Value::String(serde_json::to_string(&resp)?))
+async fn hola(request: Request, _: Context) -> Result<impl IntoResponse, Error> {
+    let body = request.body();
+    let body: ClientRequest = serde_json::from_slice(&body)?;
+    let base64_image = body.base64;
     Ok(json!({ "alpha": base64_image }))
 }
+
+#[derive(Deserialize)]
+struct ClientRequest {
+    base64: String,
+}
+
+// #[derive(Serialize)]
+// struct Response {
+//     alpha: String,
+// }
+
+// async fn respond_with_alpha(event: Value, _: Context) -> Result<Response, Error> {
+//     let base64_image = event["base64"].as_str().unwrap_or("hmmm");
+//     // let image = base64_to_image(&base64_image);
+//     // let resized_image = resize_image(&image);
+//     // let lightest_rgb = lowest_highest_luminance_rgb(&resized_image).1;
+//     // let alpha = overlay_opacity(
+//     //     &Rgb::new(255, 255, 255),
+//     //     &lightest_rgb,
+//     //     &Rgb::new(0, 0, 0),
+//     //     4.5,
+//     // );
+//     let resp = Response {
+//         alpha: base64_image.to_string(),
+//     };
+
+//     Ok(resp)
+// }
+
+// async fn hello(event: Value, _: Context) -> Result<IntoResponse, Error> {
+//     let base64_image = event["base64"].as_str().unwrap_or("hmmm");
+//     let resp = Response {
+//         alpha: base64_image.to_string(),
+//     };
+
+//     Ok(serde_json::Value::String(serde_json::to_string(&resp)?))
+//     // Ok(json!({ "alpha": base64_image }))
+// }
 
 fn overlay_opacity(
     foreground_colour: &Rgb,
