@@ -25,6 +25,7 @@
     "crypto-js": "^4.0.0",
     "dayjs": "^1.10.4",
     "domhandler": "^4.2.0",
+    "dompurify": "^2.2.8",
     "feather-icons-react": "^0.4.3",
     "formik": "^2.2.6",
     "gatsby": "^3.5.0",
