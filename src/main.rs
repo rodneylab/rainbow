@@ -16,16 +16,12 @@ async fn main() -> Result<(), Error> {
     Ok(())
 }
 
-// async fn hola(request: Request, _: Context) -> Result<impl IntoResponse, Error> {
-//     let body = request.body();
-//     let body: ClientRequest = serde_json::from_slice(&body)?;
-//     let base64_image = body.base64;
-//     Ok(json!({ "alpha": base64_image }))
-// }
-
 #[derive(Deserialize)]
 struct ClientRequest {
     base64: String,
+    minimum_contrast_ratio: f64,
+    overlay_colour: String,
+    text_colour: String,
 }
 
 async fn respond_with_alpha(request: Request, _: Context) -> Result<impl IntoResponse, Error> {
@@ -36,10 +32,10 @@ async fn respond_with_alpha(request: Request, _: Context) -> Result<impl IntoRes
     let resized_image = resize_image(&image);
     let lightest_rgb = lowest_highest_luminance_rgb(&resized_image).1;
     let alpha = overlay_opacity(
-        &Rgb::new(255, 255, 255),
+        &get_rgb_from_hex(&body.overlay_colour),
         &lightest_rgb,
-        &Rgb::new(0, 0, 0),
-        4.5,
+        &get_rgb_from_hex(&body.text_colour),
+        body.minimum_contrast_ratio,
     );
     Ok(json!({ "alpha": alpha }))
 }
@@ -112,7 +108,6 @@ fn delta_from_colour_target_luminance(colour_ratio: &RgbRatio, target_luminance:
     let mut iteration = 1;
 
     while (target_luminance - luminance_current).abs() > eps {
-        // while iteration < 11 {
         println!(
             "Iteration: {} {} {} {}",
             iteration, delta_current, delta_next, luminance_current
@@ -151,6 +146,24 @@ fn lowest_highest_luminance_rgb(image: &PhotonImage) -> (Rgb, Rgb) {
         }
     }
     (lowest_luminance_rgb, highest_luminance_rgb)
+}
+
+fn get_rgb_from_hex(hex_string: &str) -> photon_rs::Rgb {
+    let colour_hex = hex_string.trim();
+    let r = match u8::from_str_radix(&colour_hex[1..3], 16) {
+        Ok(num) => num,
+        Err(_) => 0,
+    };
+    let g = match u8::from_str_radix(&colour_hex[3..5], 16) {
+        Ok(num) => num,
+        Err(_) => 0,
+    };
+    let b = match u8::from_str_radix(&colour_hex[5..7], 16) {
+        Ok(num) => num,
+        Err(_) => 0,
+    };
+    println!("{} {} {}", r, g, b);
+    Rgb::new(r, g, b)
 }
 
 // fn read_in_colour() -> photon_rs::Rgb {
