@@ -24,6 +24,15 @@ const validate = (values) => {
   if (!validColour(values.overlayColour)) {
     errors.overlayColour = 'Enter colour in #000000 format';
   }
+  if (!validColour(values.textColour)) {
+    errors.textColour = 'Enter colour in #000000 format';
+  }
+  const minContrastRatioNumber = values.minContrastRatio;
+  if (minContrastRatioNumber < 0.0
+    || minContrastRatioNumber > 1.0
+  ) {
+    errors.minContrastRatio = 'Enter a value between zero and one';
+  }
   return errors;
 };
 
@@ -54,8 +63,6 @@ export default function Home({ data }) {
           text_colour: currentTextColour,
         },
       });
-      console.log('Response: ', response);
-      console.log('JSON: ', await response.data);
       setAlpha(parseFloat(response.data.alpha));
       setShowAlpha(true);
     } catch (error) {
