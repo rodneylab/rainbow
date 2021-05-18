@@ -24,7 +24,7 @@ const TextInputField = ({
 
   return (
     <div>
-      <label htmlFor={id} className="screen-reader-text">
+      <label htmlFor={id}>
         {label}
       </label>
       <Field
@@ -55,6 +55,7 @@ const TextInputField = ({
 TextInputField.defaultProps = {
   innerRef: null,
   isRequired: null,
+  onChange: null,
   step: '1',
   // className: '',
 };
@@ -71,6 +72,7 @@ TextInputField.propTypes = {
   isRequired: PropTypes.bool,
   label: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
+  onChange: PropTypes.func,
   placeholder: PropTypes.string.isRequired,
   step: PropTypes.string,
   type: PropTypes.string.isRequired,
