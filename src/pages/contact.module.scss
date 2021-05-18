@@ -1,5 +1,11 @@
 @import '../styles/styles.scss';
 
+.content {
+  h1 {
+    color: $color-theme-1;
+  }
+}
+
 .contact-details {
   list-style-type: none;
 

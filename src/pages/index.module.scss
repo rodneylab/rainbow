@@ -6,6 +6,7 @@
     margin: $spacing-6 auto;
     padding: $spacing-2;
     background-color: rgba($color: $color-theme-1, $alpha: 0.5);
+    border: $spacing-px solid $color-theme-1;
   }
 }
 .image-placeholder::before {
@@ -20,6 +21,8 @@
   display: flex;
   align-items: center;
   background-color: $color-theme-4;
+  border: $spacing-px solid $color-theme-1;
+  border-radius: $spacing-1;
   color: $color-theme-2;
   width: 60%;
   margin-left: auto;
@@ -68,11 +71,52 @@
     left: $spacing-4;
     padding: $spacing-0 $spacing-2;
     font-size: $font-size-4;
-    
+
     p {
       margin-bottom: 0;
     }
   }
+}
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 60%;
+  margin: $spacing-12 auto $spacing-20;
+  padding: $spacing-6 $spacing-4;
+  background-color: $color-theme-5;
+  border-radius: $spacing-2;
+  border: $spacing-px solid $color-theme-1;
+  box-shadow: $spacing-0 $spacing-0 $spacing-1 $spacing-0
+    adjust-color($color: $color-theme-1, $alpha: 0.2);
+  color: $color-theme-4;
+
+  button {
+    margin-left: auto;
+    padding: $spacing-2 $spacing-4;
+    color: $color-theme-2;
+    background-color: $color-theme-1;
+    border: $spacing-px-2 solid $color-theme-3;
+    box-shadow: $spacing-0 $spacing-0 $spacing-1 $spacing-0
+      adjust-color($color: $color-theme-2, $alpha: 0.2);
+    border-radius: $spacing-2;
+    font-size: $font-size-2;
+    cursor: pointer;
+    margin-top: $spacing-4;
+  }
+
+  button:hover {
+    color: $color-theme-1;
+    background-color: $color-theme-3;
+    border-color: $color-theme-1;
+  }
+}
+
+.form-content {
+  display: flex;
+  flex-direction: column;
+  max-width: 30rem;
 }
 
 @media screen and (max-width: $desktop-breakpoint) {

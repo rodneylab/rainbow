@@ -7,6 +7,8 @@ import PropTypes from 'prop-types';
 
 import FormikErrorFocus from '../components/FormikErrorFocus';
 import {
+  formContainer,
+  formContent,
   header,
   imagePlaceholder,
   imagePlaceholderContent,
@@ -49,7 +51,7 @@ const DEFAULT_MIN_CONTRAST_RATIO = 4.5;
 export default function Home({ data }) {
   const [, setLocalFile] = useState('');
   const [alpha, setAlpha] = useState(0.5);
-  const [textColour, setTextColour] = useState('#fff');
+  const [textColour, setTextColour] = useState('#ffffff');
   const [currentTextColour, setCurrentTextColour] = useState('#fff');
   const [imagePreviewURL, setImagePreviewURL] = useState('#');
   const [imageBase64, setImageBase64] = useState('');
@@ -124,13 +126,13 @@ export default function Home({ data }) {
         <header className={header}>
           <h1>Rainbow Contrast Checker</h1>
         </header>
-        <form method="post" encType="multipart/form-data">
+        {/* <form method="post" encType="multipart/form-data">
           <div>
             <label htmlFor="file">Choose an image file to upload</label>
             <input onChange={handleFileInput} type="file" name="image" id="file" accept="image/*" />
           </div>
         </form>
-        <br />
+        <br /> */}
         {imagePreviewURL === '#' ? (
           <div className={imagePlaceholder}>
             <div className={imagePlaceholderContent}>
@@ -154,13 +156,15 @@ export default function Home({ data }) {
             overlayColour: '#000000',
             textColour: '#ffffff',
             minContrastRatio: DEFAULT_MIN_CONTRAST_RATIO,
+            manualAlpha: 0.5,
           }}
           onSubmit={handleSubmit}
           validate={validate}
         >
           {({ isSubmitting }) => (
             <FormikErrorFocus>
-              <Form id="rainbow-form" name="rainbow">
+              <Form className={formContainer} id="rainbow-form" name="rainbow">
+                <div className={formContent}>
                 <TextInputField
                   isRequired={false}
                   id="overlay-text"
@@ -236,8 +240,9 @@ export default function Home({ data }) {
                   type="number"
                 />
                 <button type="submit" disabled={isSubmitting}>
-                  Invoke Serverless
+                  Get Alpha
                 </button>
+                </div>
               </Form>
             </FormikErrorFocus>
           )}

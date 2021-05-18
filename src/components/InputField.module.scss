@@ -1,0 +1,22 @@
+@import '../styles/styles.scss';
+
+.container {
+  display: flex;
+  padding-bottom: $spacing-4;
+  align-items: center;
+}
+
+.field {
+  background-color: $color-theme-4;
+  border: $spacing-px-2 solid $color-theme-1;
+  box-shadow: $spacing-0 $spacing-0 $spacing-1 $spacing-0
+    adjust-color($color: $color-theme-3, $alpha: 0.2);
+  border-radius: $spacing-1;
+  color: $color-theme-3;
+  margin-left: auto;
+  padding: $spacing-1 $spacing-2;
+}
+
+.error-text {
+  color: $color-theme-1;
+}

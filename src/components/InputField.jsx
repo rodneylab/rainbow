@@ -2,13 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { ErrorMessage, Field, useField } from 'formik';
 
-// import {
-//   container, errorText, field, screenReaderText,
-// } from './InputField.module.scss';
+import {
+  container, errorText, field, screenReaderText,
+} from './InputField.module.scss';
 import { isBrowser } from '../utilities/utilities';
 
 const TextInputField = ({
-  // className,
+  className,
   id,
   innerRef,
   isRequired,
@@ -23,7 +23,7 @@ const TextInputField = ({
   const [, meta] = useField(id, name, placeholder, type);
 
   return (
-    <div>
+    <div className={container}>
       <label htmlFor={id}>
         {label}
       </label>
@@ -33,7 +33,7 @@ const TextInputField = ({
         aria-invalid={meta.error && meta.touched ? 'true' : null}
         aria-describedby={meta.error && meta.touched ? `${id}-error` : null}
         aria-required={isRequired ? true : null}
-        // className={`${className} ${field}`}
+        className={`${className} ${field}`}
         name={name}
         onChange={onChange}
         placeholder={placeholder}
