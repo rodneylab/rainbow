@@ -148,22 +148,36 @@ fn lowest_highest_luminance_rgb(image: &PhotonImage) -> (Rgb, Rgb) {
     (lowest_luminance_rgb, highest_luminance_rgb)
 }
 
+/// convert an octet from hex to decimal
+fn hex_to_decimal(hex_string: &str) -> u8 {
+    let result = match u8::from_str_radix(&hex_string, 16) {
+        Ok(num) => num,
+        Err(_) => 0,
+    };
+    result
+}
+
+/// convert either #000 or #000000 format colour to photon_rs::Rgb
 fn get_rgb_from_hex(hex_string: &str) -> photon_rs::Rgb {
     let colour_hex = hex_string.trim();
-    let r = match u8::from_str_radix(&colour_hex[1..3], 16) {
-        Ok(num) => num,
-        Err(_) => 0,
-    };
-    let g = match u8::from_str_radix(&colour_hex[3..5], 16) {
-        Ok(num) => num,
-        Err(_) => 0,
-    };
-    let b = match u8::from_str_radix(&colour_hex[5..7], 16) {
-        Ok(num) => num,
-        Err(_) => 0,
-    };
-    println!("{} {} {}", r, g, b);
-    Rgb::new(r, g, b)
+    let hex_string_length = Some(hex_string.len());
+    match hex_string_length {
+        Some(7) => {
+            let r = hex_to_decimal(&colour_hex[1..3]);
+            let g = hex_to_decimal(&colour_hex[3..5]);
+            let b = hex_to_decimal(&colour_hex[5..7]);
+            Rgb::new(r, g, b)
+        }
+        Some(4) => {
+            let r_hex = &colour_hex[1..2];
+            let g_hex = &colour_hex[2..3];
+            let b_hex = &colour_hex[3..4];
+            let long_format_hex =
+                format!("#{}{}{}{}{}{}", r_hex, r_hex, g_hex, g_hex, b_hex, b_hex);
+            get_rgb_from_hex(&long_format_hex)
+        }
+        _ => panic!("Check rgb input"),
+    }
 }
 
 // fn read_in_colour() -> photon_rs::Rgb {
@@ -189,6 +203,7 @@ fn get_rgb_from_hex(hex_string: &str) -> photon_rs::Rgb {
 //     Rgb::new(r, g, b)
 // }
 
+/// resize the image so the ongest edge is 256 pixels
 fn resize_image(image: &PhotonImage) -> PhotonImage {
     let long_side = 256;
     let input_height = image.get_height();
@@ -296,6 +311,24 @@ mod tests {
         let data="iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==";
         assert_eq!(get_data_from_data_uri(data_uri), data);
         assert_eq!(get_data_from_data_uri(data), data);
+    }
+
+    #[test]
+    fn test_get_rgb_from_hex() {
+        let hex_colour = String::from("#000000");
+        assert_eq!(get_rgb_from_hex(&hex_colour).get_red(), 0);
+        assert_eq!(get_rgb_from_hex(&hex_colour).get_green(), 0);
+        assert_eq!(get_rgb_from_hex(&hex_colour).get_blue(), 0);
+
+        let hex_colour = String::from("#000");
+        assert_eq!(get_rgb_from_hex(&hex_colour).get_red(), 0);
+        assert_eq!(get_rgb_from_hex(&hex_colour).get_green(), 0);
+        assert_eq!(get_rgb_from_hex(&hex_colour).get_blue(), 0);
+
+        let hex_colour = String::from("#ff8000");
+        assert_eq!(get_rgb_from_hex(&hex_colour).get_red(), 255);
+        assert_eq!(get_rgb_from_hex(&hex_colour).get_green(), 128);
+        assert_eq!(get_rgb_from_hex(&hex_colour).get_blue(), 0);
     }
 
     #[test]
