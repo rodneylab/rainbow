@@ -31,13 +31,16 @@ async fn respond_with_alpha(request: Request, _: Context) -> Result<impl IntoRes
     let image = base64_to_image(&base64_image);
     let resized_image = resize_image(&image);
     let lightest_rgb = lowest_highest_luminance_rgb(&resized_image).1;
+    let overlay_colour = get_rgb_from_hex(&body.overlay_colour);
+    let text_colour = get_rgb_from_hex(&body.text_colour);
     let alpha = overlay_opacity(
-        &get_rgb_from_hex(&body.overlay_colour),
+        &overlay_colour,
         &lightest_rgb,
-        &get_rgb_from_hex(&body.text_colour),
+        &text_colour,
         body.minimum_contrast_ratio,
     );
-    Ok(json!({ "alpha": alpha }))
+    let text_overlay_contrast = contrast_ratio(&overlay_colour, &text_colour);
+    Ok(json!({ "alpha": alpha, "text_overlay_contrast": text_overlay_contrast }))
 }
 
 fn get_data_from_data_uri(data_uri: &str) -> &str {
@@ -81,6 +84,24 @@ fn overlay_opacity(
     println!("Delta: {}", delta);
     println!("Overlay alpha: {} {} {}", opacity_r, opacity_g, opacity_b);
     (opacity_r + opacity_g + opacity_b) / 3.0
+}
+
+fn contrast_ratio_from_relative_luminance(
+    relative_luminance_1: &f64,
+    relative_luminance_2: &f64,
+) -> f64 {
+    if relative_luminance_1 < relative_luminance_2 {
+        (relative_luminance_2 + 0.05) / (relative_luminance_1 + 0.05)
+    } else {
+        (relative_luminance_1 + 0.05) / (relative_luminance_2 + 0.05)
+    }
+}
+
+fn contrast_ratio(colour_1: &Rgb, colour_2: &Rgb) -> f64 {
+    contrast_ratio_from_relative_luminance(
+        &relative_luminance(colour_1),
+        &relative_luminance(colour_2),
+    )
 }
 
 // Newton-Raphson solution of delta
@@ -304,6 +325,34 @@ fn relative_luminance_derivative(colour_ratio: &RgbRatio) -> f64 {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn test_contrast_ratio() {
+        let colour_black = Rgb::new(0, 0, 0);
+        let colour_blue = Rgb::new(0, 0, 255);
+        let colour_white = Rgb::new(255, 255, 255);
+        let colour_yellow = Rgb::new(255, 255, 0);
+
+        assert_eq!(contrast_ratio(&colour_black, &colour_white), 21.0);
+        assert_eq!(contrast_ratio(&colour_white, &colour_black), 21.0);
+        assert_eq!(contrast_ratio(&colour_black, &colour_black), 1.0);
+        assert_eq!(
+            contrast_ratio(&colour_blue, &colour_yellow),
+            8.00163666121113
+        );
+        assert_eq!(
+            contrast_ratio(&colour_yellow, &colour_blue),
+            8.00163666121113
+        );
+    }
+
+    #[test]
+    fn test_contrast_ratio_from_relative_luminance() {
+        assert_eq!(contrast_ratio_from_relative_luminance(&0.0, &1.0), 21.0);
+        assert_eq!(contrast_ratio_from_relative_luminance(&1.0, &0.0), 21.0);
+        assert_eq!(contrast_ratio_from_relative_luminance(&0.0, &0.0), 1.0);
+        assert_eq!(contrast_ratio_from_relative_luminance(&0.5, &0.5), 1.0);
+    }
 
     #[test]
     fn test_get_data_from_data_uri() {

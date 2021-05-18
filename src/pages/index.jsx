@@ -13,6 +13,7 @@ import {
   overlayTextContainer,
   userImageContainer,
 } from './index.module.scss';
+import { N_DASH_ENTITY } from '../constants/entities';
 import { PureLayout as Layout } from '../components/Layout';
 import { PureSEO as SEO } from '../components/SEO';
 import TextInputField from '../components/InputField';
@@ -27,11 +28,18 @@ const validate = (values) => {
   if (!validColour(values.textColour)) {
     errors.textColour = 'Enter colour in #000000 format';
   }
-  const minContrastRatioNumber = values.minContrastRatio;
-  if (minContrastRatioNumber < 0.0
-    || minContrastRatioNumber > 1.0
+  const minContrastRatio = values;
+  if (minContrastRatio < 1.0
+    || minContrastRatio > 21.0
   ) {
-    errors.minContrastRatio = 'Enter a value between zero and one';
+    errors.minContrastRatio = `Enter a value in the range 1${N_DASH_ENTITY}21`;
+  }
+
+  const { manualAlpha } = values;
+  if (manualAlpha < 0.0
+    || manualAlpha > 1.0
+  ) {
+    errors.manualAlpha = 'Enter a value between zero and one';
   }
   return errors;
 };
@@ -49,6 +57,7 @@ export default function Home({ data }) {
   const [, setOverlayColourInput] = useState('#000');
   const [overlayText, setOverlayText] = useState('Overlay text');
   const [showAlpha, setShowAlpha] = useState(false);
+  const [textOverlayContrastRatio, setTextOverlayContrastRatio] = useState(0.0);
 
   const handleSubmit = async (values) => {
     try {
@@ -64,6 +73,7 @@ export default function Home({ data }) {
         },
       });
       setAlpha(parseFloat(response.data.alpha));
+      setTextOverlayContrastRatio(response.data.text_overlay_contrast);
       setShowAlpha(true);
     } catch (error) {
       if (error.response) {
@@ -204,6 +214,8 @@ export default function Home({ data }) {
                   name="minContrastRatio"
                   placeholder="4.5"
                   step="0.5"
+                  min="1.0"
+                  max="21.0"
                   label="Minimum contrast ratio"
                   title="Minimum contrast ratio"
                   type="number"
@@ -217,6 +229,8 @@ export default function Home({ data }) {
                   name="manualAlpha"
                   placeholder="0.5"
                   step="0.05"
+                  min="0.0"
+                  max="1.0"
                   label="Manual alpha"
                   title="Manual alpha"
                   type="number"
@@ -229,11 +243,18 @@ export default function Home({ data }) {
           )}
         </Formik>
         {showAlpha ? (
-          <p>
-            Recommended alpha:
-            {' '}
-            {alpha}
-          </p>
+          <>
+            <p>
+              Recommended alpha:
+              {' '}
+              {alpha}
+            </p>
+            <p>
+              Text/overlay contrast ratio:
+              {' '}
+              {textOverlayContrastRatio}
+            </p>
+          </>
         ) : null}
         {/* <form>
             <label htmlFor="overlay-colour">Overlay colour (#000000):</label>
