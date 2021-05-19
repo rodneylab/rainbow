@@ -17,6 +17,29 @@
   padding: $spacing-1 $spacing-2;
 }
 
+label {
+  padding-right: $spacing-4;
+}
+
+input {
+  width: 6rem;
+}
+
+input[name='overlayText'] {
+  width: 100%;
+}
+
+input[type='number'] {
+  width: 5rem;
+}
+
 .error-text {
   color: $color-theme-1;
+}
+
+@media screen and (max-width: $desktop-breakpoint) {
+  .container {
+    display: flex;
+    flex-wrap: wrap;
+  }
 }

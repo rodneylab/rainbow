@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { ErrorMessage, Field, useField } from 'formik';
 
 import {
-  container, errorText, field, screenReaderText,
+  container, errorText, field,
 } from './InputField.module.scss';
 import { isBrowser } from '../utilities/utilities';
 
@@ -44,7 +44,7 @@ const TextInputField = ({
       />
       <ErrorMessage
         id={`${id}-error`}
-        // className={errorText}
+        className={errorText}
         name={name}
         component="small"
       />

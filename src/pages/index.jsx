@@ -5,14 +5,18 @@ import { Formik, Form } from 'formik';
 import { graphql } from 'gatsby';
 import PropTypes from 'prop-types';
 
+import { CameraIcon } from '../components/Icons';
 import FormikErrorFocus from '../components/FormikErrorFocus';
 import {
+  dangerText,
   formContainer,
   formContent,
   header,
+  imageContainer,
   imagePlaceholder,
   imagePlaceholderContent,
   overlayTextContainer,
+  resultsContainer,
   userImageContainer,
 } from './index.module.scss';
 import { N_DASH_ENTITY } from '../constants/entities';
@@ -21,6 +25,7 @@ import { PureSEO as SEO } from '../components/SEO';
 import TextInputField from '../components/InputField';
 
 const validColour = (colour) => /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/i.test(colour);
+const validContrastRatio = (ratio) => ratio >= 1.0 && ratio <= 21.0;
 
 const validate = (values) => {
   const errors = {};
@@ -31,16 +36,12 @@ const validate = (values) => {
     errors.textColour = 'Enter colour in #000000 format';
   }
   const minContrastRatio = values;
-  if (minContrastRatio < 1.0
-    || minContrastRatio > 21.0
-  ) {
+  if (minContrastRatio <= 1.0 || minContrastRatio >= 21.0) {
     errors.minContrastRatio = `Enter a value in the range 1${N_DASH_ENTITY}21`;
   }
 
   const { manualAlpha } = values;
-  if (manualAlpha < 0.0
-    || manualAlpha > 1.0
-  ) {
+  if (manualAlpha <= 0.0 || manualAlpha >= 1.0) {
     errors.manualAlpha = 'Enter a value between zero and one';
   }
   return errors;
@@ -55,15 +56,17 @@ export default function Home({ data }) {
   const [currentTextColour, setCurrentTextColour] = useState('#fff');
   const [imagePreviewURL, setImagePreviewURL] = useState('#');
   const [imageBase64, setImageBase64] = useState('');
-  const [overlayColour, setOverlayColour] = useState('#000');
+  const [minContrastRatio, setMinContrastRatio] = useState(DEFAULT_MIN_CONTRAST_RATIO);
+  const [minContrastRatioInput, setMinContrastRatioInput] = useState(DEFAULT_MIN_CONTRAST_RATIO);
+  const [overlayColour, setOverlayColour] = useState('#000000');
   const [, setOverlayColourInput] = useState('#000');
   const [overlayText, setOverlayText] = useState('Overlay text');
   const [showAlpha, setShowAlpha] = useState(false);
+  const [showForm, setShowForm] = useState(false);
   const [textOverlayContrastRatio, setTextOverlayContrastRatio] = useState(0.0);
 
-  const handleSubmit = async (values) => {
+  const handleSubmit = async () => {
     try {
-      const { minContrastRatio } = values;
       const response = await axios({
         url: '.netlify/functions/rainbow',
         method: 'POST',
@@ -97,6 +100,7 @@ export default function Home({ data }) {
     const file = event.target.files[0];
     reader.readAsDataURL(file);
     setLocalFile(file);
+    setShowForm(true);
   };
 
   const purifyUserText = (text) => {
@@ -115,156 +119,177 @@ export default function Home({ data }) {
     return `#${r}${r}${g}${g}${b}${b}${Math.ceil(alpha * 255).toString(16)}`;
   };
 
+  let isThrottled;
+
+  const throttle = (callback, delay) => {
+    if (isThrottled) return;
+    isThrottled = true;
+    setTimeout(() => {
+      callback();
+      isThrottled = false;
+    }, delay);
+  };
+
   return (
     <>
       <SEO
         data={data}
         title="Home"
-        metadescription="Climate - Gatsby v3 Starter for MDX Gatsby Blog"
+        metadescription="Rainbow Contrast check accessibility tool for web designers and web developers."
       />
       <Layout data={data}>
         <header className={header}>
           <h1>Rainbow Contrast Checker</h1>
         </header>
-        {/* <form method="post" encType="multipart/form-data">
-          <div>
-            <label htmlFor="file">Choose an image file to upload</label>
-            <input onChange={handleFileInput} type="file" name="image" id="file" accept="image/*" />
-          </div>
-        </form>
-        <br /> */}
-        {imagePreviewURL === '#' ? (
-          <div className={imagePlaceholder}>
-            <div className={imagePlaceholderContent}>
-              <label htmlFor="file">Choose an image file to get going</label>
-              <input onChange={handleFileInput} type="file" id="file" accept="image/*" />
+        <div className={imageContainer}>
+          {imagePreviewURL === '#' ? (
+            <div className={imagePlaceholder}>
+              <div className={imagePlaceholderContent}>
+                <label htmlFor="file">
+                  <p>Choose an image file to get going</p>
+                <CameraIcon />
+                </label>
+                <input onChange={handleFileInput} type="file" id="file" accept="image/*" />
+              </div>
             </div>
-          </div>
-        ) : (
-          <div className={userImageContainer}>
-            <img alt="user uploaded content" id="myImg" src={imagePreviewURL} />
-            <div
-              className={overlayTextContainer}
-              style={{ color: textColour, background: rgba() }}
-              // eslint-disable-next-line react/no-danger
-              dangerouslySetInnerHTML={{ __html: purifyUserText(overlayText) }}
-            />
-          </div>
-        )}
-        <Formik
-          initialValues={{
-            overlayColour: '#000000',
-            textColour: '#ffffff',
-            minContrastRatio: DEFAULT_MIN_CONTRAST_RATIO,
-            manualAlpha: 0.5,
-          }}
-          onSubmit={handleSubmit}
-          validate={validate}
-        >
-          {({ isSubmitting }) => (
-            <FormikErrorFocus>
-              <Form className={formContainer} id="rainbow-form" name="rainbow">
-                <div className={formContent}>
-                <TextInputField
-                  isRequired={false}
-                  id="overlay-text"
-                  onChange={(event) => {
-                    setOverlayText(event.currentTarget.value);
-                    setShowAlpha(false);
-                  }}
-                  name="overlayText"
-                  placeholder="Overlay text"
-                  label="Overlay text"
-                  title="Overlay text"
-                  type="text"
-                />
-                <TextInputField
-                  isRequired={false}
-                  id="overlay-colour"
-                  onChange={(event) => {
-                    const currentValue = event.currentTarget.value;
-                    setOverlayColourInput(currentValue);
-                    if (validColour(currentValue)) {
-                      setOverlayColour(currentValue);
-                    }
-                    setShowAlpha(false);
-                  }}
-                  name="overlayColour"
-                  placeholder="#000000"
-                  label="Overlay colour"
-                  title="Overlay colour"
-                  type="text"
-                />
-                <TextInputField
-                  isRequired={false}
-                  id="text-colour"
-                  onChange={(event) => {
-                    const currentValue = event.currentTarget.value;
-                    setTextColour(currentValue);
-                    if (validColour(currentValue)) {
-                      setCurrentTextColour(currentValue);
-                    }
-                  }}
-                  value={textColour}
-                  name="textColour"
-                  placeholder="#ffffff"
-                  label="Text colour"
-                  title="Text colour"
-                  type="text"
-                />
-                <TextInputField
-                  isRequired={false}
-                  id="min-contrast-ratio"
-                  name="minContrastRatio"
-                  placeholder="4.5"
-                  step="0.5"
-                  min="1.0"
-                  max="21.0"
-                  label="Minimum contrast ratio"
-                  title="Minimum contrast ratio"
-                  type="number"
-                />
-                <TextInputField
-                  isRequired={false}
-                  id="manual-alpha"
-                  onChange={(event) => {
-                    setAlpha(event.currentTarget.value);
-                  }}
-                  name="manualAlpha"
-                  placeholder="0.5"
-                  step="0.05"
-                  min="0.0"
-                  max="1.0"
-                  label="Manual alpha"
-                  title="Manual alpha"
-                  type="number"
-                />
-                <button type="submit" disabled={isSubmitting}>
-                  Get Alpha
-                </button>
-                </div>
-              </Form>
-            </FormikErrorFocus>
+          ) : (
+            <div className={userImageContainer}>
+              <img alt="user uploaded content" id="myImg" src={imagePreviewURL} />
+              <div
+                className={overlayTextContainer}
+                style={{ color: textColour, background: rgba() }}
+                // eslint-disable-next-line react/no-danger
+                dangerouslySetInnerHTML={{ __html: purifyUserText(overlayText) }}
+              />
+            </div>
           )}
-        </Formik>
+        </div>
         {showAlpha ? (
-          <>
+          <div className={resultsContainer}>
+            <h2>Computer says:</h2>
             <p>
-              Recommended alpha:
-              {' '}
-              {alpha}
+              Try using an overlay alpha of at least: <strong>{alpha.toFixed(2)}</strong>.
             </p>
-            <p>
-              Text/overlay contrast ratio:
-              {' '}
-              {textOverlayContrastRatio}
-            </p>
-          </>
+            {textOverlayContrastRatio < minContrastRatio ? (
+              <p>
+                <span className={dangerText}>WARNING</span>: Text/overlay contrast ratio is only{' '}
+                <strong>{textOverlayContrastRatio.toFixed(2)}</strong>. Consider changing the text
+                or overlay colour.
+              </p>
+            ) : null}
+          </div>
         ) : null}
-        {/* <form>
-            <label htmlFor="overlay-colour">Overlay colour (#000000):</label>
-            <input id="overlay-colour" type="text" />
-          </form> */}
+        {showForm ? (
+          <Formik
+            initialValues={{
+              overlayColour: '#000000',
+              textColour: '#ffffff',
+              minContrastRatio,
+              manualAlpha: 0.5,
+            }}
+            // enableReinitialize
+            validateOnChange
+            onSubmit={() => throttle(handleSubmit, 10000)}
+            validate={validate}
+          >
+            {({ isSubmitting, validateField }) => (
+              <FormikErrorFocus>
+                <Form className={formContainer} id="rainbow-form" name="rainbow">
+                  <div className={formContent}>
+                    <TextInputField
+                      isRequired={false}
+                      id="overlay-text"
+                      onChange={(event) => {
+                        setOverlayText(event.currentTarget.value);
+                        setShowAlpha(false);
+                      }}
+                      name="overlayText"
+                      placeholder="Overlay text"
+                      label="Text"
+                      title="Text"
+                      type="text"
+                    />
+                    <TextInputField
+                      isRequired={false}
+                      id="text-colour"
+                      onChange={(event) => {
+                        const currentValue = event.currentTarget.value;
+                        setTextColour(currentValue);
+                        validateField('textColour');
+                        if (validColour(currentValue)) {
+                          setCurrentTextColour(currentValue);
+                        }
+                      }}
+                      value={textColour}
+                      name="textColour"
+                      placeholder="#ffffff"
+                      label="Text colour"
+                      title="Text colour"
+                      type="text"
+                    />
+                    <TextInputField
+                      isRequired={false}
+                      id="overlay-colour"
+                      onChange={(event) => {
+                        const currentValue = event.currentTarget.value;
+                        setOverlayColourInput(currentValue);
+                        if (validColour(currentValue)) {
+                          setOverlayColour(currentValue);
+                        }
+                        setShowAlpha(false);
+                      }}
+                      value={overlayColour}
+                      name="overlayColour"
+                      placeholder="#000000"
+                      label="Overlay colour"
+                      title="Overlay colour"
+                      type="text"
+                    />
+                    <TextInputField
+                      isRequired={false}
+                      id="min-contrast-ratio"
+                      onChange={(event) => {
+                        const currentValue = event.target.value;
+                        setMinContrastRatioInput(currentValue);
+                        if (validContrastRatio(currentValue)) {
+                          setMinContrastRatio(currentValue);
+                        }
+                      }}
+                      value={minContrastRatioInput}
+                      name="minContrastRatio"
+                      placeholder="4.5"
+                      step="0.5"
+                      min="1.0"
+                      max="21.0"
+                      label="Min. contrast ratio"
+                      title="Minimum contrast ratio"
+                      type="number"
+                    />
+                    <TextInputField
+                      isRequired={false}
+                      id="manual-alpha"
+                      onChange={(event) => {
+                        setAlpha(event.currentTarget.value);
+                      }}
+                      value={alpha}
+                      name="manualAlpha"
+                      placeholder="0.5"
+                      step="0.05"
+                      min="0.0"
+                      max="1.0"
+                      label="Alpha"
+                      title="Alpha"
+                      type="number"
+                    />
+                    <button type="submit" disabled={isSubmitting}>
+                      Get Alpha
+                    </button>
+                  </div>
+                </Form>
+              </FormikErrorFocus>
+            )}
+          </Formik>
+        ) : null}
       </Layout>
     </>
   );

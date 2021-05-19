@@ -34,10 +34,10 @@ $spacing-24: 6rem;
 $spacing-32: 8rem;
 
 // Fonts
-$font-family-sans: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans,
-  Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
-$font-family-serif: 'Merriweather', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
-  Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', serif;
+$font-family-sans: 'Open Sans', -apple-system, 'BlinkMacSystemFont', 'Segoe UI', 'Roboto',
+  'Oxygen-Sans', 'Ubuntu', 'Cantarell', 'Helvetica Neue', sans-serif;
+$font-family-serif: 'Merriweather', -apple-system, 'BlinkMacSystemFont', 'Segoe UI', 'Roboto',
+  'Oxygen-Sans', 'Ubuntu', 'Cantarell', 'Helvetica Neue', serif;
 $font-body: $font-family-serif;
 $font-heading: $font-family-serif;
 
@@ -79,11 +79,11 @@ $line-height-normal: 1.5;
 $line-height-relaxed: 1.75;
 
 // Colours
-$color-theme-1: #252525; // 
-$color-theme-2: #d5d5d3; // 
-$color-theme-3: #ffffff; // 
-$color-theme-4: #444444; // 
-$color-theme-5: #fdd947; // 
+$color-theme-1: #252525; //
+$color-theme-2: #d5d5d3; //
+$color-theme-3: #ffffff; //
+$color-theme-4: #444444; //
+$color-theme-5: #fdd947; //
 
 $color-primary: #005b99;
 $color-text: #0d1821; // rich black FOGRA 29
