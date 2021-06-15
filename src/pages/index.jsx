@@ -44,6 +44,7 @@ const validate = (values) => {
   if (manualAlpha <= 0.0 || manualAlpha >= 1.0) {
     errors.manualAlpha = 'Enter a value between zero and one';
   }
+  console.log('Errors:', {errors});
   return errors;
 };
 
@@ -54,6 +55,7 @@ export default function Home({ data }) {
   const [alpha, setAlpha] = useState(0.5);
   const [textColour, setTextColour] = useState('#ffffff');
   const [currentTextColour, setCurrentTextColour] = useState('#fff');
+  const [currentOverlayColour, setCurrentOverlayColour] = useState('#000');
   const [imagePreviewURL, setImagePreviewURL] = useState('#');
   const [imageBase64, setImageBase64] = useState('');
   const [minContrastRatio, setMinContrastRatio] = useState(DEFAULT_MIN_CONTRAST_RATIO);
@@ -64,6 +66,43 @@ export default function Home({ data }) {
   const [showAlpha, setShowAlpha] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const [textOverlayContrastRatio, setTextOverlayContrastRatio] = useState(0.0);
+  const [inputErrors, setInputErrors] = useState({});
+
+  const colourErrorMessage = 'Enter hex colour e.g. #000000 or #000';
+
+  const handleOverlayColourChange = (event, { setErrors }) => {
+    const currentValue = event.currentTarget.value;
+    let errorMessage = '';
+    setOverlayColour(currentValue);
+    if (validColour(currentValue)) {
+      setCurrentOverlayColour(currentValue);
+    } else {
+      errorMessage = colourErrorMessage;
+    }
+    setInputErrors({
+      ...inputErrors,
+      overlayColour: errorMessage,
+    });
+    setErrors(inputErrors);
+    setShowAlpha(false);
+  };
+
+  const handleTextColourChange = async (event, { setErrors }) => {
+    const currentValue = event.currentTarget.value;
+    let errorMessage = '';
+    setTextColour(currentValue);
+    if (validColour(currentValue)) {
+      setCurrentTextColour(currentValue);
+    } else {
+      errorMessage = colourErrorMessage;
+    }
+    await setInputErrors({
+      ...inputErrors,
+      textColour: errorMessage,
+    });
+    setErrors(inputErrors);
+    setShowAlpha(false);
+  };
 
   const handleSubmit = async () => {
     try {
@@ -147,7 +186,7 @@ export default function Home({ data }) {
               <div className={imagePlaceholderContent}>
                 <label htmlFor="file">
                   <p>Choose an image file to get going</p>
-                <CameraIcon />
+                  <CameraIcon />
                 </label>
                 <input onChange={handleFileInput} type="file" id="file" accept="image/*" />
               </div>
@@ -192,7 +231,7 @@ export default function Home({ data }) {
             onSubmit={() => throttle(handleSubmit, 10000)}
             validate={validate}
           >
-            {({ isSubmitting, validateField }) => (
+            {({ isSubmitting, setErrors, validateField }) => (
               <FormikErrorFocus>
                 <Form className={formContainer} id="rainbow-form" name="rainbow">
                   <div className={formContent}>
@@ -213,12 +252,7 @@ export default function Home({ data }) {
                       isRequired={false}
                       id="text-colour"
                       onChange={(event) => {
-                        const currentValue = event.currentTarget.value;
-                        setTextColour(currentValue);
-                        validateField('textColour');
-                        if (validColour(currentValue)) {
-                          setCurrentTextColour(currentValue);
-                        }
+                        handleTextColourChange(event, { setErrors });
                       }}
                       value={textColour}
                       name="textColour"
@@ -231,12 +265,7 @@ export default function Home({ data }) {
                       isRequired={false}
                       id="overlay-colour"
                       onChange={(event) => {
-                        const currentValue = event.currentTarget.value;
-                        setOverlayColourInput(currentValue);
-                        if (validColour(currentValue)) {
-                          setOverlayColour(currentValue);
-                        }
-                        setShowAlpha(false);
+                        handleOverlayColourChange(event, { setErrors});
                       }}
                       value={overlayColour}
                       name="overlayColour"
