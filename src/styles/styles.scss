@@ -1,5 +1,8 @@
 /* Based on styles.css provided by https://github.com/gatsbyjs/gatsby-starter-blog via MIT license */
 @charset "UTF-8";
+
+@use 'sass:math';
+
 /* SCSS Custom Properties Definitions */
 // Widths
 $max-width-none: 'none';
@@ -150,7 +153,6 @@ h1 {
   margin-top: 0;
   font-weight: $font-weight-black;
   font-size: $font-size-6;
-  // font-style: italic;
   color: $color-heading-black;
 }
 
@@ -202,11 +204,11 @@ li p {
 ul li,
 ol li {
   padding-left: $spacing-0;
-  margin-bottom: calc(#{$spacing-8 / 2});
+  margin-bottom: math.div($spacing-8 , 2);
 }
 
 li > p {
-  margin-bottom: calc(#{$spacing-8 / 2});
+  margin-bottom: math.div($spacing-8 , 2);
 }
 
 li *:last-child {
@@ -215,7 +217,7 @@ li *:last-child {
 
 li > ul {
   margin-left: $spacing-8;
-  margin-top: calc(#{$spacing-8 / 2});
+  margin-top: math.div($spacing-8 , 2);
 }
 
 blockquote {
