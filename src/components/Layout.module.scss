@@ -50,7 +50,7 @@ $colours: #fedc00 0, #fedc00 1/18 * 100%, #fcb712 0, #fcb712 2/18 * 100%, #f7921
   background-color: $color-theme-2;
   border: $spacing-px-2 solid $color-theme-4;
   box-shadow: $spacing-0 $spacing-0 $spacing-px-2 $spacing-0
-    adjust-color($color: $color-theme-2, $alpha: 0.2);
+    adjust-color($color: $color-theme-5, $alpha: 0.2);
   border-radius: $spacing-8;
   display: flex;
   list-style-type: none;
