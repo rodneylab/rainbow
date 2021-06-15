@@ -2,8 +2,16 @@
 
 .container {
   display: flex;
+  flex-direction: column;
   padding-bottom: $spacing-4;
   align-items: center;
+}
+
+.label-field-container {
+display: flex;
+justify-content: space-between;
+align-items: center;
+width: 100%;
 }
 
 .field {
@@ -34,7 +42,9 @@ input[type='number'] {
 }
 
 .error-text {
-  color: $color-theme-1;
+  padding-top: $spacing-1;
+  color: $color-danger;
+  width: 100%;
 }
 
 @media screen and (max-width: $desktop-breakpoint) {

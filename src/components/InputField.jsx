@@ -2,9 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { ErrorMessage, Field, useField } from 'formik';
 
-import {
-  container, errorText, field,
-} from './InputField.module.scss';
+import { container, errorText, field, labelFieldContainer } from './InputField.module.scss';
 import { isBrowser } from '../utilities/utilities';
 
 const TextInputField = ({
@@ -24,30 +22,27 @@ const TextInputField = ({
 
   return (
     <div className={container}>
-      <label htmlFor={id}>
-        {label}
-      </label>
-      <Field
-        as="input"
-        id={id}
-        aria-invalid={meta.error && meta.touched ? 'true' : null}
-        aria-describedby={meta.error && meta.touched ? `${id}-error` : null}
-        aria-required={isRequired ? true : null}
-        className={`${className} ${field}`}
-        name={name}
-        onChange={onChange}
-        placeholder={placeholder}
-        step={step}
-        type={type}
-        value={value}
-        innerRef={innerRef}
-      />
-      <ErrorMessage
-        id={`${id}-error`}
-        className={errorText}
-        name={name}
-        component="small"
-      />
+      <div className={labelFieldContainer}>
+        <label htmlFor={id}>{label}</label>
+        <Field
+          as="input"
+          id={id}
+          aria-invalid={meta.error && meta.touched ? 'true' : null}
+          aria-describedby={meta.error && meta.touched ? `${id}-error` : null}
+          aria-required={isRequired ? true : null}
+          className={`${className} ${field}`}
+          name={name}
+          onChange={onChange}
+          placeholder={placeholder}
+          step={step}
+          type={type}
+          value={value}
+          innerRef={innerRef}
+        />
+      </div>
+      <small className={errorText}>
+        <ErrorMessage id={`${id}-error`} name={name} />
+      </small>
     </div>
   );
 };
@@ -63,9 +58,9 @@ TextInputField.defaultProps = {
 TextInputField.propTypes = {
   innerRef: isBrowser
     ? PropTypes.oneOfType([
-      PropTypes.func,
-      PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
-    ])
+        PropTypes.func,
+        PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
+      ])
     : PropTypes.func,
   // className: PropTypes.string,
   id: PropTypes.string.isRequired,
@@ -93,9 +88,7 @@ export const TextAreaField = ({
 
   return (
     <div>
-      <label htmlFor={id}>
-        {label}
-      </label>
+      <label htmlFor={id}>{label}</label>
       <Field
         as="textarea"
         id={id}
@@ -130,9 +123,9 @@ TextAreaField.defaultProps = {
 TextAreaField.propTypes = {
   innerRef: isBrowser
     ? PropTypes.oneOfType([
-      PropTypes.func,
-      PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
-    ])
+        PropTypes.func,
+        PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
+      ])
     : PropTypes.func,
   // className: PropTypes.string,
   id: PropTypes.string.isRequired,
