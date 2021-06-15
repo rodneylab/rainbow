@@ -7,6 +7,7 @@ module.exports = {
     'plugin:react/recommended',
     'plugin:jsx-a11y/recommended',
     'airbnb',
+    'prettier',
     'plugin:cypress/recommended',
   ],
   parserOptions: {
@@ -20,5 +21,6 @@ module.exports = {
     'react', 'jsx-a11y', 'cypress',
   ],
   rules: {
+    'prettier/prettier': 'error',
   },
 };
