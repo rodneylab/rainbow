@@ -1,14 +1,12 @@
-import React from 'react';
 import { graphql } from 'gatsby';
-
 import PropTypes from 'prop-types';
-
+import React from 'react';
 import Card from '../components/Card';
-import { contactAddress, contactDetails, content } from './contact.module.scss';
-import { PureLayout as Layout } from '../components/Layout';
-import { PureSEO as SEO } from '../components/SEO';
 import { EmailIcon, FacebookIcon, TelegramIcon, TwitterIcon, WireIcon } from '../components/Icons';
+import { PureLayout as Layout } from '../components/Layout';
 import { ExternalLink, TwitterMessageLink } from '../components/Link';
+import { PureSEO as SEO } from '../components/SEO';
+import { contactAddress, contactDetails, content } from './contact.module.scss';
 
 export default function Contact({ data }) {
   const {
@@ -48,8 +46,7 @@ export default function Contact({ data }) {
                   </ExternalLink>
                 </li>
                 <li>
-                  <TwitterIcon />
-                  {' '}
+                  <TwitterIcon />{' '}
                   <TwitterMessageLink twitterUserId={twitterUserId}>
                     <span className={contactAddress}>{twitterUsername}</span>
                   </TwitterMessageLink>

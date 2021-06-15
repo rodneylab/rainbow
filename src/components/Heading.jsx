@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-
+import React, { useState } from 'react';
 import { hideHeadingLink } from './Heading.module.scss';
 
 const Heading = ({ children, as, hash }) => {
@@ -17,8 +16,7 @@ const Heading = ({ children, as, hash }) => {
       onMouseLeave: () => setShowLink(false),
     },
     <span>
-      {children}
-      {' '}
+      {children}{' '}
       <a aria-hidden className={showLink ? '' : hideHeadingLink} href={`#${hash}`}>
         #
       </a>

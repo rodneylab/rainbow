@@ -1,7 +1,6 @@
-import React from 'react';
 import { Link } from 'gatsby';
 import PropTypes from 'prop-types';
-
+import React from 'react';
 import { PureLayout as Layout } from '../Layout';
 import { PureSEO as SEO } from '../SEO';
 
@@ -13,12 +12,10 @@ const PurePageNotFound = ({ data }) => (
         <h1>Page not found!</h1>
         <p>Not sure that page exists!</p>
         <p>
-          Go to
-          {' '}
+          Go to{' '}
           <Link aria-label="Go to home page" to="/">
             home page
-          </Link>
-          {' '}
+          </Link>{' '}
           instead
         </p>
       </>

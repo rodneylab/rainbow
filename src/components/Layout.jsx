@@ -1,9 +1,10 @@
-import React from 'react';
 import dayjs from 'dayjs';
 import { graphql } from 'gatsby';
-import PropTypes from 'prop-types';
 import { StaticImage } from 'gatsby-plugin-image';
-
+import PropTypes from 'prop-types';
+import React from 'react';
+import { COPYRIGHT_ENTITY } from '../constants/entities';
+import { FacebookIcon, GithubIcon, LinkedinIcon, TwitterIcon } from './Icons';
 import {
   container,
   footerContainer,
@@ -11,20 +12,10 @@ import {
   hoverJump,
   mainContainer,
 } from './Layout.module.scss';
-
-import { COPYRIGHT_ENTITY } from '../constants/entities';
 import { ExternalLink } from './Link';
-import {
-  FacebookIcon,
-  GithubIcon,
-  LinkedinIcon,
-  TwitterIcon,
-} from './Icons';
 
 const FooterIcons = ({
-  siteMetadata: {
-    facebookPage, githubPage, linkedinProfile, twitterUsername,
-  },
+  siteMetadata: { facebookPage, githubPage, linkedinProfile, twitterUsername },
 }) => (
   <div className={footerIcons}>
     <ul>
@@ -86,8 +77,7 @@ const RodneyLabCredit = () => (
       fontFamily: 'Lato',
     }}
   >
-    A project by
-    {' '}
+    A project by{' '}
     <span style={{ display: 'flex', alignItems: 'center' }}>
       <a
         className={hoverJump}
@@ -107,8 +97,7 @@ const RodneyLabCredit = () => (
             background: '#ffffff',
           }}
         />
-      </a>
-      {' '}
+      </a>{' '}
       <a aria-label="Open Rodney Lab site" href="https://rodneylab.com" rel="noopener">
         <span style={{ fontWeight: 300, color: '#fdd947' }}>RODNEY LAB</span>
       </a>
@@ -126,13 +115,11 @@ export const PureLayout = ({ children, data: { site } }) => {
       <main className={mainContainer}>{children}</main>
       <footer className={footerContainer}>
         <div>
-          Created by
-          {' '}
+          Created by{' '}
           <a aria-label="Open Rodney Lab Site" href="https://rodneylab.com" rel="noopener">
             Rodney Lab
           </a>
-          .
-          {` Copyright ${COPYRIGHT_ENTITY} ${copyrightYear}.`}
+          .{` Copyright ${COPYRIGHT_ENTITY} ${copyrightYear}.`}
         </div>
         <FooterIcons siteMetadata={siteMetadata} />
         <RodneyLabCredit />

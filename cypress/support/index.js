@@ -14,12 +14,10 @@
 // ***********************************************************
 
 // Import commands.js using ES2015 syntax:
-import './commands'
-
-// Alternatively you can use CommonJS syntax:
-// require('./commands')
-
-// eslint-disable-next-line import/no-extraneous-dependencies
-import 'cypress-axe';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import '@testing-library/cypress/add-commands';
+// Alternatively you can use CommonJS syntax:
+// require('./commands')
+// eslint-disable-next-line import/no-extraneous-dependencies
+import 'cypress-axe';
+import './commands';

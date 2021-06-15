@@ -10,14 +10,14 @@
 
 **This project is still under development and not all features have been fully implemented**
 
-The project creates a website which can be used as a tool for keep text legible when overlayed on images.  It is easy to forget low contrast between text and background image can make text difficult to read.  This is especially true for partially sighted people.
+The project creates a website which can be used as a tool for keep text legible when overlayed on images. It is easy to forget low contrast between text and background image can make text difficult to read. This is especially true for partially sighted people.
 
-Typically to keep the text legible, designers place an overlay over the image.  For example, for an image with with text, a blacl overlay with low transparency (alpha) darkens the image so there is enough contrast between light areas of the image and the white text.
+Typically to keep the text legible, designers place an overlay over the image. For example, for an image with with text, a blacl overlay with low transparency (alpha) darkens the image so there is enough contrast between light areas of the image and the white text.
 
-This tool will work out the minimum alpha needed to get a contrast ratio of 4.5 between the text and the lightest pixel in the image.  You don't have to stick with white text, or a black overlay.  You can even increase the target contrast ratio, if that's what you want.  The calculations are run using serverless Rust code, so the UX remains responsive while the numbers are crunching.
-
+This tool will work out the minimum alpha needed to get a contrast ratio of 4.5 between the text and the lightest pixel in the image. You don't have to stick with white text, or a black overlay. You can even increase the target contrast ratio, if that's what you want. The calculations are run using serverless Rust code, so the UX remains responsive while the numbers are crunching.
 
 Features:
+
 - Site use Gatsby v3 for speed
 - Serverless code written in Rust for speed
 - Axe clean site &mdash; site has been optimisd for accessility using deque axe tools
@@ -76,41 +76,41 @@ A quick look at the top-level files and directories you'll see in a Gatsby 3 pro
     ├── package.json
     └── README.md
 
-1.  **`/cypress`**: This directory contains Cypress axe accessibility end-to-end tests.  You can expand the tests to suit your needs.
+1.  **`/cypress`**: This directory contains Cypress axe accessibility end-to-end tests. You can expand the tests to suit your needs.
 
 2.  **`/node_modules`**: This directory contains all of the modules of code that your project depends on (npm packages) are automatically installed.
 
 3.  **`/src`**: This directory will contain all of the code related to what you will see on the front-end of your site (what you see in the browser) such as your site header or a page template. `src` is a convention for “source code”.
 
-4.  **`.env.EXAMPLE`**: This file contains example environment variables.  Make two copies to this same root folder: `.env.development` and `.env.production` and add your personal environment variables.  These two files will be excluded from git commits by default.
+4.  **`.env.EXAMPLE`**: This file contains example environment variables. Make two copies to this same root folder: `.env.development` and `.env.production` and add your personal environment variables. These two files will be excluded from git commits by default.
 
-5.  **`.eslintrc.js`**: This file tells ESLint which linting rules to apply.  Set to use Airbnb rules by default.  Adjust to suit your taste.  As well as code style rules, it applies a11y recommended accessibility checks.
+5.  **`.eslintrc.js`**: This file tells ESLint which linting rules to apply. Set to use Airbnb rules by default. Adjust to suit your taste. As well as code style rules, it applies a11y recommended accessibility checks.
 
 6.  **`.gitignore`**: This file tells git which files it should not track / not maintain a version history for.
 
 7.  **`.prettierrc`**: This is a configuration file for [Prettier](https://prettier.io/). Prettier is a tool to help keep the formatting of your code consistent.
 
-8.  **`.stylelintrc.json`**: This is a configuration file for [StyleLint](https://stylelint.io/). Stylelint is a tool to help keep the formatting of your code consistent.  It can be used in teams to enforce a consistent coding style.
+8.  **`.stylelintrc.json`**: This is a configuration file for [StyleLint](https://stylelint.io/). Stylelint is a tool to help keep the formatting of your code consistent. It can be used in teams to enforce a consistent coding style.
 
-9.  **`commitlint.config.js`**: Configuration for commitlint which is used to enforce conventional git commits.  This works in tandem with husky configuration in the `package.json` file.
+9.  **`commitlint.config.js`**: Configuration for commitlint which is used to enforce conventional git commits. This works in tandem with husky configuration in the `package.json` file.
 
-10.  **`csp-util`**: This is a script for placing CSP hashes in Netlify headers, improving site security when running on Netlify.
+10. **`csp-util`**: This is a script for placing CSP hashes in Netlify headers, improving site security when running on Netlify.
 
-11.  **`gatsby-browser.js`**: This file is where Gatsby 3 expects to find any usage of the [Gatsby 3 browser APIs](https://www.gatsbyjs.com/docs/browser-apis/) (if any). These allow customisation/extension of default Gatsby settings affecting the browser.
+11. **`gatsby-browser.js`**: This file is where Gatsby 3 expects to find any usage of the [Gatsby 3 browser APIs](https://www.gatsbyjs.com/docs/browser-apis/) (if any). These allow customisation/extension of default Gatsby settings affecting the browser.
 
-12.  **`gatsby-config.js`**: This is the main configuration file for a Gatsby 3 site. This is where you can specify information about your site (metadata) like the site title and description, which Gatsby 3 plugins you’d like to include, etc. (Check out the [config docs](https://www.gatsbyjs.com/docs/gatsby-config/) for more detail).  To improve security, fairly strict security header parameters are set.  **You will almost certainly need to tweak these for your own use case**. For help use the following resources:
+12. **`gatsby-config.js`**: This is the main configuration file for a Gatsby 3 site. This is where you can specify information about your site (metadata) like the site title and description, which Gatsby 3 plugins you’d like to include, etc. (Check out the [config docs](https://www.gatsbyjs.com/docs/gatsby-config/) for more detail). To improve security, fairly strict security header parameters are set. **You will almost certainly need to tweak these for your own use case**. For help use the following resources:
 
     - <a aria-label="See security heading ratings and tips" href="https://securityheaders.com/" target="_blank" rel="nofollow noopener noreferrer">securityheaders.com</a>
     - <a aria-label="See security heading tips" href="https://csper.io/"  target="_blank" rel="nofollow noopener noreferrer">csper.io</a>
     - <a aria-label="Open the Google C S P evaluator tool" href="https://csp-evaluator.withgoogle.com/" target="_blank" rel="nofollow noopener noreferrer">csp-evaluator.withgoogle.com</a>
 
-13.  **`gatsby-node.js`**: This file is where Gatsby 3 expects to find any usage of the [Gatsby&nbsp;3 Node APIs](https://www.gatsbyjs.com/docs/node-apis/) (if any). These allow customisation/extension of default Gatsby 3 settings affecting pieces of the site build process.
+13. **`gatsby-node.js`**: This file is where Gatsby 3 expects to find any usage of the [Gatsby&nbsp;3 Node APIs](https://www.gatsbyjs.com/docs/node-apis/) (if any). These allow customisation/extension of default Gatsby 3 settings affecting pieces of the site build process.
 
-14.  **`gatsby-ssr.js`**: This file is where Gatsby 3 expects to find any usage of the [Gatsby&nbsp;3 server-side rendering APIs](https://www.gatsbyjs.com/docs/ssr-apis/) (if any). These allow customisation of default Gatsby 3 settings affecting server-side rendering.
+14. **`gatsby-ssr.js`**: This file is where Gatsby 3 expects to find any usage of the [Gatsby&nbsp;3 server-side rendering APIs](https://www.gatsbyjs.com/docs/ssr-apis/) (if any). These allow customisation of default Gatsby 3 settings affecting server-side rendering.
 
-15.  **`LICENSE`**: This Gatsby 3 starter is licensed under the BSD-3-Clause license.
+15. **`LICENSE`**: This Gatsby 3 starter is licensed under the BSD-3-Clause license.
 
-16. **`netlify.toml`** This file contains configuration for Netlify builds.  It includes an instruction to use the Netlify `netlify-plugin-gatsby-cache` plugin which helps improve build speed on Netlify.  It also includes the custom build command, defined in `package.json`, which generates Netlify headers with CSP hashes.
+16. **`netlify.toml`** This file contains configuration for Netlify builds. It includes an instruction to use the Netlify `netlify-plugin-gatsby-cache` plugin which helps improve build speed on Netlify. It also includes the custom build command, defined in `package.json`, which generates Netlify headers with CSP hashes.
 
 17. **`package-lock.json`** (See `package.json` below, first). This is an automatically generated file based on the exact versions of your npm dependencies that were installed for your project. **(You won’t change this file directly).**
 
@@ -122,7 +122,7 @@ A quick look at the top-level files and directories you'll see in a Gatsby 3 pro
 
 [Build, Deploy, and Host On Netlify](https://www.netlify.com/)
 
-Netlify offers an easy to configure environment and a generous free tier.  With baked-in CDN and automated TLS certificates it is a great choice for getting your Gatsby 3 MDX blog up and running at warp speed.
+Netlify offers an easy to configure environment and a generous free tier. With baked-in CDN and automated TLS certificates it is a great choice for getting your Gatsby 3 MDX blog up and running at warp speed.
 
 Run the custom build script to ensure CSP hashes are generated and added to Netlify headers:
 

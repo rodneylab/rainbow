@@ -1,12 +1,15 @@
-import React, { useState } from 'react';
 import axios from 'axios';
 import DOMPurify from 'dompurify';
-import { Formik, Form } from 'formik';
+import { Form, Formik } from 'formik';
 import { graphql } from 'gatsby';
 import PropTypes from 'prop-types';
-
-import { CameraIcon } from '../components/Icons';
+import React, { useState } from 'react';
 import FormikErrorFocus from '../components/FormikErrorFocus';
+import { CameraIcon } from '../components/Icons';
+import TextInputField from '../components/InputField';
+import { PureLayout as Layout } from '../components/Layout';
+import { PureSEO as SEO } from '../components/SEO';
+import { N_DASH_ENTITY } from '../constants/entities';
 import {
   dangerText,
   formContainer,
@@ -19,10 +22,6 @@ import {
   resultsContainer,
   userImageContainer,
 } from './index.module.scss';
-import { N_DASH_ENTITY } from '../constants/entities';
-import { PureLayout as Layout } from '../components/Layout';
-import { PureSEO as SEO } from '../components/SEO';
-import TextInputField from '../components/InputField';
 
 const validColour = (colour) => /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/i.test(colour);
 const validContrastRatio = (ratio) => ratio >= 1.0 && ratio <= 21.0;
@@ -44,7 +43,7 @@ const validate = (values) => {
   if (manualAlpha <= 0.0 || manualAlpha >= 1.0) {
     errors.manualAlpha = 'Enter a value between zero and one';
   }
-  console.log('Errors:', {errors});
+  console.log('Errors:', { errors });
   return errors;
 };
 
@@ -265,7 +264,7 @@ export default function Home({ data }) {
                       isRequired={false}
                       id="overlay-colour"
                       onChange={(event) => {
-                        handleOverlayColourChange(event, { setErrors});
+                        handleOverlayColourChange(event, { setErrors });
                       }}
                       value={overlayColour}
                       name="overlayColour"
