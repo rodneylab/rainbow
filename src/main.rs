@@ -24,6 +24,7 @@ struct ClientRequest {
     text_colour: String,
 }
 
+/// returns contrast ratio in range 1.0 to 21.0
 fn contrast_ratio_from_relative_luminance(
     relative_luminance_1: &f64,
     relative_luminance_2: &f64,
@@ -35,6 +36,7 @@ fn contrast_ratio_from_relative_luminance(
     }
 }
 
+/// returns contrast ratio in range 1.0 to 21.0
 fn contrast_ratio(colour_1: &Rgb, colour_2: &Rgb) -> f64 {
     contrast_ratio_from_relative_luminance(
         &relative_luminance(colour_1),
@@ -87,6 +89,7 @@ fn delta_from_colour_target_luminance(colour_ratio: &RgbRatio, target_luminance:
     delta_next
 }
 
+/// utility function for extract data from a data uri
 fn get_data_from_data_uri(data_uri: &str) -> &str {
     let data;
     match data_uri.split(",").nth(1) {
@@ -128,6 +131,7 @@ fn hex_to_decimal(hex_string: &str) -> u8 {
     result
 }
 
+/// returns the luminance for the pixels with lowest and highest values
 fn lowest_highest_luminance_rgb(image: &PhotonImage) -> (Rgb, Rgb) {
     let mut highest_luminance = 0.0;
     let mut lowest_luminance = 1.0;
@@ -148,6 +152,7 @@ fn lowest_highest_luminance_rgb(image: &PhotonImage) -> (Rgb, Rgb) {
     (lowest_luminance_rgb, highest_luminance_rgb)
 }
 
+/// return the minimum overlay opacity needed to produce the given contrast ratio
 fn overlay_opacity(
     foreground_colour: &Rgb,
     background_colour: &Rgb,
@@ -182,11 +187,13 @@ fn overlay_opacity(
     (opacity_r + opacity_g + opacity_b) / 3.0
 }
 
+/// returns the relative luminance of a colour
 fn relative_luminance(colour: &Rgb) -> f64 {
     let standard_rgb_colour = rgb_ratio(colour);
     relative_luminance_from_colour_ratio(&standard_rgb_colour)
 }
 
+/// returns the first order derivative of relative lumunance wrt colours
 fn relative_luminance_derivative(colour_ratio: &RgbRatio) -> f64 {
     let linear_r = if colour_ratio.get_red() <= 0.03928 {
         1.0 / 12.92
@@ -206,6 +213,7 @@ fn relative_luminance_derivative(colour_ratio: &RgbRatio) -> f64 {
     (2.4 / 1.055) * (0.2126 * linear_r + 0.7152 * linear_g + 0.0722 * linear_b)
 }
 
+/// returns relative luminance
 fn relative_luminance_from_colour_ratio(colour_ratio: &RgbRatio) -> f64 {
     let linear_r = if colour_ratio.get_red() <= 0.03928 {
         colour_ratio.get_red() / 12.92
@@ -250,6 +258,7 @@ fn resize_image(image: &PhotonImage) -> PhotonImage {
     )
 }
 
+/// takes input request body JSON and returns a JSON response
 async fn respond_with_alpha(request: Request, _: Context) -> Result<impl IntoResponse, Error> {
     let body = request.body();
     let body: ClientRequest = serde_json::from_slice(&body)?;
@@ -299,29 +308,6 @@ fn rgb_ratio(colour: &Rgb) -> RgbRatio {
     }
 }
 
-// fn read_in_colour() -> photon_rs::Rgb {
-//     println!("Hex colour: (e.g. \"#ff0044\")");
-//     let mut colour_hex = String::new();
-//     io::stdin()
-//         .read_line(&mut colour_hex)
-//         .expect("Sorry, I don't understand, try somthing like '#ff0044'");
-//     let colour_hex = colour_hex.trim();
-//     let r = match u8::from_str_radix(&colour_hex[1..3], 16) {
-//         Ok(num) => num,
-//         Err(_) => 0,
-//     };
-//     let g = match u8::from_str_radix(&colour_hex[3..5], 16) {
-//         Ok(num) => num,
-//         Err(_) => 0,
-//     };
-//     let b = match u8::from_str_radix(&colour_hex[5..7], 16) {
-//         Ok(num) => num,
-//         Err(_) => 0,
-//     };
-//     println!("{} {} {}", r, g, b);
-//     Rgb::new(r, g, b)
-// }
-
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -355,6 +341,9 @@ mod tests {
     }
 
     #[test]
+    fn test_delta_from_colour_target_luminance() {}
+
+    #[test]
     fn test_get_data_from_data_uri() {
         let data_uri="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==";
         let data="iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==";
@@ -381,6 +370,15 @@ mod tests {
     }
 
     #[test]
+    fn test_hex_to_decimal() {}
+
+    #[test]
+    fn test_lowest_highest_luminance_rgb() {}
+
+    #[test]
+    fn test_overlay_opacity() {}
+
+    #[test]
     fn test_relative_luminance() {
         let colour_black = Rgb::new(0, 0, 0);
         let colour_blue = Rgb::new(0, 0, 255);
@@ -392,6 +390,18 @@ mod tests {
         assert_eq!(relative_luminance(&colour_white), 1.0);
         assert_eq!(relative_luminance(&colour_yellow), 0.9278);
     }
+
+    #[test]
+    fn test_relative_luminance_derivative() {}
+
+    #[test]
+    fn test_relative_luminance_from_colour_ratio() {}
+
+    #[test]
+    fn test_resize_image() {}
+
+    #[test]
+    fn test_respond_with_alpha() {}
 
     #[test]
     fn test_rgb_ratio() {
