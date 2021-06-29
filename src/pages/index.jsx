@@ -43,7 +43,7 @@ const validate = (values) => {
   if (manualAlpha <= 0.0 || manualAlpha >= 1.0) {
     errors.manualAlpha = 'Enter a value between zero and one';
   }
-  console.log('Errors:', { errors });
+  // console.log('Errors:', { errors });
   return errors;
 };
 
@@ -60,7 +60,6 @@ export default function Home({ data }) {
   const [minContrastRatio, setMinContrastRatio] = useState(DEFAULT_MIN_CONTRAST_RATIO);
   const [minContrastRatioInput, setMinContrastRatioInput] = useState(DEFAULT_MIN_CONTRAST_RATIO);
   const [overlayColour, setOverlayColour] = useState('#000000');
-  const [, setOverlayColourInput] = useState('#000');
   const [overlayText, setOverlayText] = useState('Overlay text');
   const [showAlpha, setShowAlpha] = useState(false);
   const [showForm, setShowForm] = useState(false);
@@ -111,7 +110,7 @@ export default function Home({ data }) {
         data: {
           base64: imageBase64,
           minimum_contrast_ratio: minContrastRatio,
-          overlay_colour: overlayColour,
+          overlay_colour: currentOverlayColour,
           text_colour: currentTextColour,
         },
       });
@@ -120,11 +119,11 @@ export default function Home({ data }) {
       setShowAlpha(true);
     } catch (error) {
       if (error.response) {
-        console.log('Server responded with non 2xx code: ', error.response.data);
+        // console.log('Server responded with non 2xx code: ', error.response.data);
       } else if (error.request) {
-        console.log('No response received: ', error.request);
+        // console.log('No response received: ', error.request);
       } else {
-        console.log('Error setting up response: ', error.message);
+        // console.log('Error setting up response: ', error.message);
       }
     }
   };
@@ -183,6 +182,8 @@ export default function Home({ data }) {
           {imagePreviewURL === '#' ? (
             <div className={imagePlaceholder}>
               <div className={imagePlaceholderContent}>
+                {/* label and id used, tested with axe in cypress and no issues identified */}
+                {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
                 <label htmlFor="file">
                   <p>Choose an image file to get going</p>
                   <CameraIcon />
@@ -225,12 +226,11 @@ export default function Home({ data }) {
               minContrastRatio,
               manualAlpha: 0.5,
             }}
-            // enableReinitialize
             validateOnChange
             onSubmit={() => throttle(handleSubmit, 10000)}
             validate={validate}
           >
-            {({ isSubmitting, setErrors, validateField }) => (
+            {({ isSubmitting, setErrors }) => (
               <FormikErrorFocus>
                 <Form className={formContainer} id="rainbow-form" name="rainbow">
                   <div className={formContent}>
