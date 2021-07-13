@@ -4,11 +4,12 @@
     <img alt="Rodney Lab logo" src="https://rodneylab.com/assets/icon.png" width="60" />
   </a>
 </p>
+
 <h1 align="center">
   Rainbow &mdash; Accessibility Contrast Tool for Text on Images
 </h1>
 
-**This project is still under development and not all features have been fully implemented**
+[![Open in Visual Studio Code](https://open.vscode.dev/badges/open-in-vscode.svg)](https://open.vscode.dev/rodneylab/rainbow)
 
 The project creates a website which can be used as a tool for keep text legible when overlayed on images. It is easy to forget low contrast between text and background image can make text difficult to read. This is especially true for partially sighted people.
 
